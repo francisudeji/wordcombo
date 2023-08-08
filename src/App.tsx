@@ -1,6 +1,4 @@
-import { useEffect, useState } from "react";
-import reactLogo from "./assets/react.svg";
-import viteLogo from "/vite.svg";
+import { useState } from "react";
 import "./App.css";
 
 interface WordLadder {
@@ -326,7 +324,7 @@ function App() {
   ]);
 
   const [currentWord, setCurrentWord] = useState<string[]>([]);
-  const [wordLadder, setWordLadder] = useState<WordLadder>({
+  const [wordLadder] = useState<WordLadder>({
     startWord: "COLD",
     targetWord: "WARM",
   });
