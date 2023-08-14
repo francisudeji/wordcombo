@@ -29,12 +29,6 @@ export const GameContext = React.createContext<{
 function gameReducer(state: GameState, action: GameActions) {
   console.log("called with", action);
   switch (action.type) {
-    // case "increment": {
-    //   return state;
-    // }
-    // case "decrement": {
-    //   return state;
-    // }
     case "keyboard-click": {
       if (!action.payload) return state;
 

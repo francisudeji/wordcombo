@@ -1,13 +1,8 @@
-// import { useState } from "react";
 import { useState } from "react";
 import "./App.css";
 import { Board, Keyboard, WordChain } from "./components/index";
-// import { useGameDispatch, useGameState } from "./hooks/index";
 
 function App() {
-  // const { board: word, currentWord, wordLadder } = useGameState();
-  // console.log({ word, currentWord, wordLadder });
-  // const dispatch = useGameDispatch();
   const [word, setWord] = useState<string[][]>([]);
 
   const [currentWord, setCurrentWord] = useState<string[]>([]);
