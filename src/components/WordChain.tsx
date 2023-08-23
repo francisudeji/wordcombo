@@ -5,7 +5,7 @@ interface WordLadder {
 
 export function WordChain({ startWord, targetWord }: WordLadder) {
   return (
-    <div className="flex items-center justify-center space-x-4 text-sm uppercase">
+    <div className="flex items-center justify-center space-x-4 text-sm uppercase text-slate-900 font-semibold py-2">
       <p className="uppercase">{startWord}</p>
       <span>
         <svg
