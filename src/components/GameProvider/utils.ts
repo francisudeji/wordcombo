@@ -8,7 +8,10 @@ export function handleEnterClick({
   nextState: GameState;
 }) {
   const isNotCompleteWord = state.currentWord.length < 4;
-  if (isNotCompleteWord) return state;
+  if (isNotCompleteWord) {
+    nextState.message = "Incomplete word";
+    return state;
+  }
 
   // Check that the first word is the start word
   if (

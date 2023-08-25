@@ -3,7 +3,6 @@ import { GameState, GameActions } from "./types";
 import {
   handleAlphabetClick,
   handleBackClick,
-  handleDictionaryLookUp,
   handleEnterClick,
 } from "./utils";
 
