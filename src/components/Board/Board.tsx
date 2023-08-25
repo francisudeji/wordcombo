@@ -1,13 +1,24 @@
-interface Match {
-  isPartialMatch: boolean;
-  isFullMatch: boolean;
-}
+import { useGameState } from "../../hooks/use-game";
+
 interface BoardProps {
   board: string[][];
   currentWord: string[];
-  isMatch: (letter: string) => Match;
 }
-export function Board({ board, currentWord, isMatch }: BoardProps) {
+export function Board({ board, currentWord }: BoardProps) {
+  const state = useGameState();
+
+  const matches = (letter: string) => {
+    let isPartialMatch = false;
+    let isFullMatch = false;
+
+    for (let i = 0; i < state.wordLadder.targetWord.length; i++) {
+      isFullMatch = letter === state.wordLadder.targetWord[i];
+
+      isPartialMatch = state.wordLadder.targetWord.includes(letter);
+    }
+    return { isPartialMatch, isFullMatch };
+  };
+
   return (
     <div className="flex-1 flex flex-col overflow-y-scroll px-5 relative tex-slate-900">
       <div className="flex-1">stats</div>
@@ -24,7 +35,7 @@ export function Board({ board, currentWord, isMatch }: BoardProps) {
                     <span
                       key={index}
                       className={`border border-slate-300 font-semibold py-3 flex items-center justify-center text-sm rounded-sm ${
-                        isMatch(letter).isPartialMatch
+                        matches(letter).isPartialMatch
                           ? "bg-green-600 text-white"
                           : "bg-transparent"
                       }`}

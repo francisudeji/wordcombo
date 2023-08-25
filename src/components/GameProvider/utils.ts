@@ -16,8 +16,7 @@ export function handleEnterClick({
     state.currentWord.join("") !== state.wordLadder.startWord
   ) {
     // must be the start word
-    console.log(`Start word must be ${state.wordLadder.startWord}`);
-    // return newState;
+    nextState.message = `Start word must be ${state.wordLadder.startWord}`;
   }
 
   if (state.board.length > 0) {
@@ -35,9 +34,7 @@ export function handleEnterClick({
 
     if (changedLetters.length > 1) {
       // changed more than one letter
-      console.log("NO", changedLetters);
-
-      // return newState;
+      nextState.message = "Can only swap one letter at a time";
     }
   }
 
