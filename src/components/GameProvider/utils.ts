@@ -17,6 +17,7 @@ export function handleEnterClick({
   ) {
     // must be the start word
     nextState.message = `Start word must be ${state.wordLadder.startWord}`;
+    return state;
   }
 
   if (state.board.length > 0) {
@@ -35,6 +36,7 @@ export function handleEnterClick({
     if (changedLetters.length > 1) {
       // changed more than one letter
       nextState.message = "Can only swap one letter at a time";
+      return state;
     }
   }
 
@@ -90,4 +92,13 @@ export function handleAlphabetClick({
   if (isCurrentWordFilledWithActualLetters.length > 3) return state;
 
   nextState.currentWord = [...nextState.currentWord, action.payload as string];
+}
+
+export async function handleDictionaryLookUp(state: GameState) {
+  const currentWord = state.currentWord.join("");
+  const res = await fetch(
+    `https://api.dictionaryapi.dev/api/v2/entries/en/${currentWord}`
+  );
+
+  return res.ok;
 }

@@ -3,6 +3,7 @@ import { GameState, GameActions } from "./types";
 import {
   handleAlphabetClick,
   handleBackClick,
+  handleDictionaryLookUp,
   handleEnterClick,
 } from "./utils";
 
@@ -26,14 +27,21 @@ function gameReducer(state: GameState, action: GameActions) {
   const nextState = { ...state };
 
   switch (action.type) {
+    case "message": {
+      nextState.message = action.payload ?? "";
+      break;
+    }
     case "keyboardClick": {
+      if (state.message.length) {
+        nextState.message = "";
+      }
+
       if (action.payload === "BACK") {
         handleBackClick({ state, nextState });
         break;
       }
 
       if (action.payload === "ENTER") {
-        // TODO: lookup word in the dictionary
         handleEnterClick({ state, nextState });
         break;
       }

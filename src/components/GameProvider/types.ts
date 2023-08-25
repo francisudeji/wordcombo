@@ -10,6 +10,6 @@ export interface GameState {
 }
 
 export interface GameActions {
-  type: "keyboardClick";
+  type: "keyboardClick" | "message";
   payload?: string;
 }
