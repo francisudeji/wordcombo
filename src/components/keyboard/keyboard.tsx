@@ -1,5 +1,5 @@
-import { handleDictionaryLookUp } from "@components/game-provider/utils";
-import { useGameDispatch, useGameState } from "@hooks/use-game";
+import { handleDictionaryLookUp } from "../game-provider/utils";
+import { useGameDispatch, useGameState } from "../../hooks/use-game";
 
 const keyboardRows = [
   ["Q", "W", "E", "R", "T", "Y", "U", "I", "O", "P"],

@@ -1,7 +1,7 @@
-import { StartTarget } from "@components/start-target/start-target";
-import { useGameState } from "@hooks/use-game";
-import { Board } from "@components/board/board";
-import { Keyboard } from "@components/keyboard/keyboard";
+import { StartTarget } from "./components/start-target/start-target";
+import { useGameState } from "./hooks/use-game";
+import { Board } from "./components/board/board";
+import { Keyboard } from "./components/keyboard/keyboard";
 
 function App() {
   const { message } = useGameState();

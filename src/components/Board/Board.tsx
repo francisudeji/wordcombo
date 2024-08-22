@@ -1,4 +1,4 @@
-import { useGameState } from "@hooks/use-game";
+import { useGameState } from "../../hooks/use-game";
 
 export function Board() {
   const { board, currentWord, wordLadder } = useGameState();

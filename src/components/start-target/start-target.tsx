@@ -1,4 +1,4 @@
-import { useGameState } from "@hooks/use-game";
+import { useGameState } from "../../hooks/use-game";
 
 export function StartTarget() {
   const {
