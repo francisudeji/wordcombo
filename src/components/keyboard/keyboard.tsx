@@ -1,13 +1,18 @@
+import { handleDictionaryLookUp } from "@components/game-provider/utils";
+import { useGameDispatch, useGameState } from "@hooks/use-game";
+
 const keyboardRows = [
   ["Q", "W", "E", "R", "T", "Y", "U", "I", "O", "P"],
   ["A", "S", "D", "F", "G", "H", "J", "K", "L"],
   ["ENTER", "Z", "X", "C", "V", "B", "N", "M", "BACK"],
 ] as const;
+
 interface KeyboardLayoutProps {
   onClick: (letter: string) => void;
 }
 
 type KeyboardKey = (typeof keyboardRows)[number][number];
+
 interface KeyboardKeyProps extends KeyboardLayoutProps {
   keyboardKey: KeyboardKey;
 }
@@ -64,7 +69,23 @@ function KeyboardKey({ keyboardKey, onClick }: KeyboardKeyProps) {
   );
 }
 
-export function Keyboard({ onClick }: KeyboardLayoutProps) {
+export function Keyboard() {
+  const { currentWord } = useGameState();
+  const dispatch = useGameDispatch();
+
+  const handleClick = async (input: string) => {
+    // TODO: Temp fix to do async call
+    if (input === "ENTER") {
+      const exists = await handleDictionaryLookUp(currentWord.join(""));
+      if (!exists) {
+        dispatch({ type: "message", payload: "Not a dictionary word" });
+        return;
+      }
+    }
+
+    dispatch({ type: "keyboardClick", payload: input });
+  };
+
   return (
     <div className="flex flex-col gap-y-2">
       {keyboardRows.map((row, index) => {
@@ -74,7 +95,7 @@ export function Keyboard({ onClick }: KeyboardLayoutProps) {
             className="flex items-center justify-between gap-x-1 md:gap-x-2"
           >
             {row.map((key) => (
-              <KeyboardKey key={key} keyboardKey={key} onClick={onClick} />
+              <KeyboardKey key={key} keyboardKey={key} onClick={handleClick} />
             ))}
           </div>
         );

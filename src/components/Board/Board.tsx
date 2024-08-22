@@ -1,20 +1,16 @@
-import { useGameState } from "../../hooks/use-game";
+import { useGameState } from "@hooks/use-game";
 
-interface BoardProps {
-  board: string[][];
-  currentWord: string[];
-}
-export function Board({ board, currentWord }: BoardProps) {
-  const state = useGameState();
+export function Board() {
+  const { board, currentWord, wordLadder } = useGameState();
 
   const matches = (letter: string) => {
     let isPartialMatch = false;
     let isFullMatch = false;
 
-    for (let i = 0; i < state.wordLadder.targetWord.length; i++) {
-      isFullMatch = letter === state.wordLadder.targetWord[i];
+    for (let i = 0; i < wordLadder.targetWord.length; i++) {
+      isFullMatch = letter === wordLadder.targetWord[i];
 
-      isPartialMatch = state.wordLadder.targetWord.includes(letter);
+      isPartialMatch = wordLadder.targetWord.includes(letter);
     }
     return { isPartialMatch, isFullMatch };
   };

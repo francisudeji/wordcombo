@@ -1,9 +1,10 @@
-interface WordLadder {
-  startWord: string;
-  targetWord: string;
-}
+import { useGameState } from "@hooks/use-game";
 
-export function WordChain({ startWord, targetWord }: WordLadder) {
+export function StartTarget() {
+  const {
+    wordLadder: { startWord, targetWord },
+  } = useGameState();
+
   return (
     <div className="flex items-center justify-center space-x-4 text-sm uppercase text-slate-900 font-semibold py-2">
       <p className="uppercase">{startWord}</p>

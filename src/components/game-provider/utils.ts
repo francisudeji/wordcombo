@@ -97,8 +97,7 @@ export function handleAlphabetClick({
   nextState.currentWord = [...nextState.currentWord, action.payload as string];
 }
 
-export async function handleDictionaryLookUp(state: GameState) {
-  const currentWord = state.currentWord.join("");
+export async function handleDictionaryLookUp(currentWord: string) {
   const res = await fetch(
     `https://api.dictionaryapi.dev/api/v2/entries/en/${currentWord}`
   );
