@@ -1,35 +1,21 @@
-import "./App.css";
-import { handleDictionaryLookUp } from "./components/GameProvider/utils";
-import { Board, Keyboard, WordChain } from "./components/index";
-import { useGameDispatch, useGameState } from "./hooks/use-game";
+import { StartTarget } from "@components/start-target/start-target";
+import { useGameState } from "@hooks/use-game";
+import { Board } from "@components/board/board";
+import { Keyboard } from "@components/keyboard/keyboard";
 
 function App() {
-  const state = useGameState();
-  const dispatch = useGameDispatch();
-
-  const handleClick = async (input: string) => {
-    // TODO: Temp fix to do async call
-    if (input === "ENTER") {
-      const exists = await handleDictionaryLookUp(state);
-      if (!exists) {
-        dispatch({ type: "message", payload: "Not a dictionary word" });
-        return;
-      }
-    }
-
-    dispatch({ type: "keyboardClick", payload: input });
-  };
+  const { message } = useGameState();
 
   return (
     <div className="max-w-xl bg-white mx-auto flex flex-col h-[100dvh] py-6 space-y-4">
       <div className="space-y-4 px-2 md:px-5  flex items-center justify-center uppercase text-sm">
-        {state.message}
+        {message}
       </div>
 
-      <Board board={state.board} currentWord={state.currentWord} />
+      <Board />
       <div className="space-y-4 px-2 md:px-5">
-        <WordChain {...state.wordLadder} />
-        <Keyboard onClick={handleClick} />
+        <StartTarget />
+        <Keyboard />
       </div>
     </div>
   );
