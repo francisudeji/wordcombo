@@ -1,5 +1,5 @@
 import { WordsOfTheDay } from "./components/words-of-the-day/words-of-the-day";
-import { Board } from "./components/my-board/my-board";
+import { Board } from "./components/board/board";
 import { Keyboard } from "./components/keyboard/keyboard";
 import { IconButton } from "@components/button/icon-button";
 import { Header } from "@components/header/header";
