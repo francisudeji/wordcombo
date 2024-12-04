@@ -1,5 +1,6 @@
 import * as React from "react";
 import { GameContext } from "../components/game-provider/game-provider";
+import { GameState } from "@components/game-provider/types";
 
 export function useGame() {
   const context = React.useContext(GameContext);
@@ -11,10 +12,11 @@ export function useGame() {
   return context;
 }
 
-export function useGameState() {
+export function useGameState(selector: (state: GameState) => any) {
   const { state } = React.useContext(GameContext);
+  const selectedState = React.useMemo(() => selector(state), [state, selector]);
 
-  return state;
+  return selectedState;
 }
 
 export function useGameDispatch() {
