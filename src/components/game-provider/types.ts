@@ -1,15 +1,15 @@
 export interface GameState {
   count: number;
-  board: string[][];
+  board: Map<string, string[]>;
   currentWord: string[];
-  wordLadder: {
-    startWord: string;
-    targetWord: string;
+  wordsOfTheDay: {
+    start: string;
+    target: string;
   };
   message: string;
 }
 
 export interface GameActions {
-  type: "keyboardClick" | "message";
+  type: "message" | "clicked_key";
   payload?: string;
 }

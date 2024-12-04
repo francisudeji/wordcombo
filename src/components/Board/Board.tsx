@@ -1,38 +1,94 @@
 import { useGameState } from "../../hooks/use-game";
+import { cn } from "../../lib/utils";
 
 export function Board() {
-  const { board, currentWord, wordLadder } = useGameState();
+  const { board, currentWord, wordsOfTheDay, count } = useGameState(
+    (state) => ({
+      board: state.board,
+      currentWord: state.currentWord,
+      wordsOfTheDay: state.wordsOfTheDay,
+      count: state.count,
+    })
+  );
 
-  const matches = (letter: string) => {
-    let isPartialMatch = false;
-    let isFullMatch = false;
+  function determineColors(word: string) {
+    const result = Array(word.length).fill(
+      "bg-neutral-500 border-neutral-600 text-white"
+    ); // Default all to gray
+    const targetCharCount: Record<string, number> = {};
 
-    for (let i = 0; i < wordLadder.targetWord.length; i++) {
-      isFullMatch = letter === wordLadder.targetWord[i];
-
-      isPartialMatch = wordLadder.targetWord.includes(letter);
+    for (const char of wordsOfTheDay.target) {
+      targetCharCount[char] = (targetCharCount[char] || 0) + 1;
     }
-    return { isPartialMatch, isFullMatch };
-  };
+
+    for (let i = 0; i < word.length; i++) {
+      if (word[i] === wordsOfTheDay.target[i]) {
+        result[i] = "bg-green-500 border-green-600 text-white";
+        targetCharCount[word[i]] -= 1;
+      }
+    }
+
+    for (let i = 0; i < word.length; i++) {
+      if (
+        result[i] === "bg-neutral-500 border-neutral-600 text-white" &&
+        targetCharCount[word[i]] > 0
+      ) {
+        result[i] = "bg-yellow-500 border-yellow-600 text-white";
+        targetCharCount[word[i]] -= 1;
+      }
+    }
+
+    return result;
+  }
 
   return (
-    <div className="flex-1 flex flex-col overflow-y-scroll px-2 relative tex-slate-900 md:px-16">
-      <div className="space-y-4">
-        {board.map((b, index) => {
+    <div className="flex flex-col gap-4 p-4 w-3/4 mx-auto rounded-md min-h-full justify-end">
+      <div
+        className={cn("grid gap-4 text-center font-semibold", {
+          "grid-cols-4": count === 4,
+          "grid-cols-5": count === 5,
+        })}
+      >
+        {currentWord.map((letter, index) => {
+          return (
+            <span key={index} className="py-4 border rounded-md">
+              {letter}
+            </span>
+          );
+        })}
+      </div>
+
+      {board
+        .entries()
+        .toArray()
+        .reverse()
+        .map(([word, letters], rowIndex) => {
           return (
             <div
-              key={`word-${index}`}
-              className="grid grid-cols-4 gap-4 text-center font-semibold"
+              key={word}
+              className={cn("grid gap-4 text-center font-semibold", {
+                "grid-cols-4": count === 4,
+                "grid-cols-5": count === 5,
+              })}
             >
-              {b.map((letter, index) => {
+              {letters.map((letter, index) => {
+                if (rowIndex === board.size - 1) {
+                  return (
+                    <span
+                      key={index}
+                      className="py-4 border rounded-md bg-white"
+                    >
+                      {letter}
+                    </span>
+                  );
+                }
                 return (
                   <span
                     key={index}
-                    className={`border border-slate-300 font-semibold py-3 flex items-center justify-center text-sm rounded-md ${
-                      matches(letter).isPartialMatch
-                        ? "bg-green-600 text-white"
-                        : "bg-transparent"
-                    }`}
+                    className={cn(
+                      "py-4 border rounded-md",
+                      determineColors(word)[index]
+                    )}
                   >
                     {letter}
                   </span>
@@ -41,19 +97,6 @@ export function Board() {
             </div>
           );
         })}
-        <div className="grid grid-cols-4 gap-4 text-center">
-          {currentWord.map((letter, index) => {
-            return (
-              <span
-                key={index}
-                className="border border-slate-300 font-semibold py-3 flex items-center justify-center text-sm rounded-md"
-              >
-                {letter}
-              </span>
-            );
-          })}
-        </div>
-      </div>
     </div>
   );
 }
