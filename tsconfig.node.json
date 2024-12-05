@@ -1,10 +1,15 @@
 {
   "compilerOptions": {
     "composite": true,
-    "skipLibCheck": true,
-    "module": "ESNext",
-    "moduleResolution": "bundler",
-    "allowSyntheticDefaultImports": true
+    "strict": true,
+    "types": ["node"],
+    "lib": ["ES2022"],
+    "target": "ES2022",
+    "module": "NodeNext",
+    "moduleResolution": "NodeNext",
+    "allowSyntheticDefaultImports": true,
+    "noEmit": false
   },
-  "include": ["vite.config.ts"]
+  "extends": "./tsconfig.json",
+  "include": ["tailwind.config.ts", "vite.config.ts"]
 }

@@ -1,0 +1,1 @@
+import{w as t}from"./with-props-ByuiTVR5.js";import{l as e}from"./chunk-D52XG6IA-MGfthkNT.js";function s(){return[{title:"Word Combo"},{name:"description",content:"Welcome to Word Combo"}]}const i=t(function({loaderData:o}){return e.jsxs("p",{children:["hello",o.message]})});export{i as default,s as meta};
