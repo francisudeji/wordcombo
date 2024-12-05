@@ -5,6 +5,11 @@ import { IconButton } from "./components/button/icon-button";
 import { Header } from "./components/header/header";
 import { GameProvider } from "./components/game-provider/game-provider";
 import { Toaster } from "sonner";
+import type { Route } from "./+types/play";
+
+export function meta(): Route.MetaDescriptors {
+  return [{ title: "Play | WordCombo" }];
+}
 
 export default function Play() {
   return (

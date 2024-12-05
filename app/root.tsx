@@ -11,26 +11,20 @@ import type { Route } from "./+types/root";
 import stylesheet from "./index.css?url";
 import React from "react";
 
-export const links: Route.LinksFunction = () => [
-  { rel: "preconnect", href: "https://fonts.googleapis.com" },
-  {
-    rel: "preconnect",
-    href: "https://fonts.gstatic.com",
-    crossOrigin: "anonymous",
-  },
-  {
-    rel: "stylesheet",
-    href: "https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&display=swap",
-  },
-  { rel: "stylesheet", href: stylesheet },
-];
+export function links(): Route.LinkDescriptors {
+  return [{ rel: "stylesheet", href: stylesheet }];
+}
 
 export function Layout({ children }: { children: React.ReactNode }) {
   return (
     <html lang="en">
       <head>
         <meta charSet="utf-8" />
-        <meta name="viewport" content="width=device-width, initial-scale=1" />
+        <meta
+          name="viewport"
+          content="width=device-width, initial-scale=1, shrink-to-fit=no, maximum-scale=1"
+        />
+        <meta name="description" content="WordCombo is an online word game" />
         <Meta />
         <Links />
       </head>
