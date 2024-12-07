@@ -5,7 +5,7 @@ export function Header() {
   const timer = useTimer();
 
   return (
-    <header className="sticky inset-0 top-0 header py-1 backdrop-blur-sm backdrop-opacity-95 border rounded-md flex items-center justify-between px-2">
+    <header className="sticky inset-0 top-0 header py-1 backdrop-blur-sm backdrop-opacity-95 border-b sm:border sm:rounded-md flex items-center justify-between px-2">
       <IconButton title="Back">
         <svg
           xmlns="http://www.w3.org/2000/svg"

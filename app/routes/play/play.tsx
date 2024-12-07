@@ -22,7 +22,7 @@ export default function Play() {
             <Board />
           </div>
         </div>
-        <div className="sticky inset-0 bottom-0 bottom-half justify-end space-y-4 py-2 px-2 border rounded-md">
+        <div className="sticky inset-0 bottom-0 bottom-half justify-end space-y-4 py-2 px-2 border-t sm:border sm:rounded-md">
           <div className="flex justify-between">
             <IconButton title="Toggle keyboard">
               <svg
