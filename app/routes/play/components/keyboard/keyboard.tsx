@@ -76,32 +76,36 @@ export function KeyboardRow({
   onClick: (key: string) => void;
 }) {
   const isSecondRow = row[0] === "A";
+  const isLastRow = row[0] === "ENTER";
 
   return (
     <div
-      className={cn("grid grid-flow-col gap-2", {
-        "px-4": isSecondRow,
+      className={cn("flex w-full", {
+        "gap-2 ": !isSecondRow,
       })}
     >
+      {isSecondRow && <div className="flex-[0.5]"></div>}
       {row.map((key) => {
         return (
-          <button
-            key={key}
-            className={cn(
-              "font-normal rounded-md py-2 flex items-center justify-center text-center bg-white outline-none ring-1 ring-neutral-300 focus:ring-2 focus:bg-neutral-100 focus:ring-neutral-300 hover:bg-neutral-100 active:bg-neutral-200",
-              {
-                "w-[46px] sm:w-auto": isActionKey(key),
-                "w-[34px] sm:w-auto": !isActionKey(key),
-                "bg-neutral-100": isKeyHighlighted(key, highlightedKey),
-                "bg-white": !isKeyHighlighted(key, highlightedKey),
-              }
-            )}
-            onClick={() => onClick(key)}
-          >
-            {getKey(key)}
-          </button>
+          <>
+            <button
+              key={key}
+              className={cn(
+                "w-full font-normal rounded-md py-3 flex items-center justify-center text-center bg-white outline-none ring-1 ring-neutral-300 focus:ring-2 focus:bg-neutral-100 focus:ring-neutral-300 hover:bg-neutral-100 active:bg-neutral-200",
+                isKeyHighlighted(key, highlightedKey)
+                  ? "bg-neutral-100"
+                  : "bg-white",
+                isActionKey(key) && isLastRow ? "flex-[1.5]" : "flex-1",
+                isSecondRow && "second-row-margin flex-1"
+              )}
+              onClick={() => onClick(key)}
+            >
+              {getKey(key)}
+            </button>
+          </>
         );
       })}
+      {isSecondRow && <div className="flex-[0.5]"></div>}
     </div>
   );
 }
