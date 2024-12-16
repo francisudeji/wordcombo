@@ -1,100 +1,69 @@
 import { useGameState } from "../../hooks/use-game";
 import { cn } from "../../../../lib/utils";
+import { getHighlightedColour } from "./utils";
 
 export function Board() {
-  const { board, currentWord, wordsOfTheDay, count } = useGameState<
-    ["board", "currentWord", "wordsOfTheDay", "count"]
-  >((state) => ({
-    board: state.board,
-    currentWord: state.currentWord,
-    wordsOfTheDay: state.wordsOfTheDay,
-    count: state.count,
-  }));
-
-  function determineColors(word: string) {
-    const result = Array(word.length).fill(
-      "bg-neutral-500 border-neutral-600 text-white"
-    ); // Default all to gray
-    const targetCharCount: Record<string, number> = {};
-
-    for (const char of wordsOfTheDay.target) {
-      targetCharCount[char] = (targetCharCount[char] || 0) + 1;
-    }
-
-    for (let i = 0; i < word.length; i++) {
-      if (word[i] === wordsOfTheDay.target[i]) {
-        result[i] = "bg-green-500 border-green-600 text-white";
-        targetCharCount[word[i]] -= 1;
-      }
-    }
-
-    for (let i = 0; i < word.length; i++) {
-      if (
-        result[i] === "bg-neutral-500 border-neutral-600 text-white" &&
-        targetCharCount[word[i]] > 0
-      ) {
-        result[i] = "bg-yellow-500 border-yellow-600 text-white";
-        targetCharCount[word[i]] -= 1;
-      }
-    }
-
-    return result;
-  }
+  const { board, wordsOfTheDay } = useGameState<["board", "wordsOfTheDay"]>(
+    (state) => ({
+      board: state.board,
+      currentWord: state.currentWord,
+      wordsOfTheDay: state.wordsOfTheDay,
+    })
+  );
 
   return (
-    <div className="flex flex-col gap-4 p-4 w-full sm:w-3/4 mx-auto rounded-md min-h-full justify-end">
-      <div
-        className={cn("grid gap-4 text-center font-semibold", {
-          "grid-cols-4": count === 4,
-          "grid-cols-5": count === 5,
-        })}
-      >
-        {currentWord.map((letter, index) => {
-          return (
-            <span key={index} className="py-4 border rounded-md">
-              {letter}
-            </span>
-          );
-        })}
-      </div>
-
+    <div className="flex flex-col px-4 w-full sm:w-3/4 mx-auto rounded-md min-h-full justify-end gap-4">
       {Array.from(board.entries())
         .reverse()
-        .map(([word, letters], rowIndex) => {
+        .map(([word, letters]) => {
           return (
-            <div
+            <Word
               key={word}
-              className={cn("grid gap-4 text-center font-semibold", {
-                "grid-cols-4": count === 4,
-                "grid-cols-5": count === 5,
-              })}
-            >
-              {letters.map((letter, index) => {
-                if (rowIndex === board.size - 1) {
-                  return (
-                    <span
-                      key={index}
-                      className="py-4 border rounded-md bg-white"
-                    >
-                      {letter}
-                    </span>
-                  );
-                }
-                return (
-                  <span
-                    key={index}
-                    className={cn(
-                      "py-4 border rounded-md",
-                      determineColors(word)[index]
-                    )}
-                  >
-                    {letter}
-                  </span>
-                );
-              })}
-            </div>
+              word={word}
+              letters={letters}
+              target={wordsOfTheDay.target}
+            />
           );
         })}
+
+      <Word
+        word={wordsOfTheDay.start}
+        letters={wordsOfTheDay.start.split("")}
+      />
+    </div>
+  );
+}
+
+function Word({
+  word,
+  letters,
+  target,
+}: {
+  word: string;
+  letters: string[];
+  target?: string;
+}) {
+  const colour = target
+    ? getHighlightedColour(word, target)
+    : Array.from<string>({ length: word.length }).fill(
+        "bg-neutral-500 text-white"
+      );
+
+  return (
+    <div className={cn("grid grid-cols-5 text-center font-semibold gap-4")}>
+      {letters.map((letter, index) => {
+        return (
+          <span
+            key={index}
+            className={cn(
+              "py-4 ring-1 ring-white/10 rounded-lg text-xl font-medium",
+              colour[index]
+            )}
+          >
+            {letter}
+          </span>
+        );
+      })}
     </div>
   );
 }

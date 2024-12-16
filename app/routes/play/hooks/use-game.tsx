@@ -1,26 +1,28 @@
-import { useContext, useMemo } from "react";
-import { GameContext } from "../components/game-provider/game-provider";
+import { useContext, useMemo, useCallback } from "react";
+import {
+  GameStateContext,
+  GameDispatchContext,
+} from "../components/game-provider/game-provider";
 import type { Selector, SelectorKey } from "../components/game-provider/types";
 
-export function useGame() {
-  const context = useContext(GameContext);
+export function useGameState<T extends SelectorKey>(selector: Selector<T>) {
+  const state = useContext(GameStateContext);
 
-  if (context === undefined) {
-    throw new Error("useGame must be used within a GameProvider");
+  if (state === undefined) {
+    throw new Error("useGameState must be used within a GameProvider");
   }
 
-  return context;
-}
+  const selectedState = useCallback(() => selector(state), [state, selector]);
 
-export function useGameState<T extends SelectorKey>(selector: Selector<T>) {
-  const { state } = useContext(GameContext);
-  const selectedState = useMemo(() => selector(state), [state, selector]);
-
-  return selectedState;
+  return useMemo(() => selectedState(), [selectedState]);
 }
 
 export function useGameDispatch() {
-  const { dispatch } = useContext(GameContext);
+  const dispatch = useContext(GameDispatchContext);
+
+  if (dispatch === undefined) {
+    throw new Error("useGameDispatch must be used within a GameProvider");
+  }
 
   return dispatch;
 }

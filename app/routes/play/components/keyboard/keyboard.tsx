@@ -1,5 +1,5 @@
 import { useGameDispatch } from "../../hooks/use-game";
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useState } from "react";
 import { cn } from "../../../../lib/utils";
 
 const keyboardRows = [
@@ -85,24 +85,22 @@ export function KeyboardRow({
       })}
     >
       {isSecondRow && <div className="flex-[0.5]"></div>}
-      {row.map((key) => {
+      {row.map((key, index) => {
         return (
-          <>
-            <button
-              key={key}
-              className={cn(
-                "w-full font-normal rounded-md py-3 flex items-center justify-center text-center bg-white outline-none ring-1 ring-neutral-300 focus:ring-2 focus:bg-neutral-100 focus:ring-neutral-300 hover:bg-neutral-100 active:bg-neutral-200",
-                isKeyHighlighted(key, highlightedKey)
-                  ? "bg-neutral-100"
-                  : "bg-white",
-                isActionKey(key) && isLastRow ? "flex-[1.5]" : "flex-1",
-                isSecondRow && "second-row-margin flex-1"
-              )}
-              onClick={() => onClick(key)}
-            >
-              {getKey(key)}
-            </button>
-          </>
+          <button
+            key={index}
+            className={cn(
+              "w-full select-none font-medium rounded-md py-3 flex items-center justify-center text-center bg-white outline-none ring-1 ring-neutral-300 focus:ring-2 focus:bg-neutral-100 focus:ring-neutral-300 hover:bg-neutral-100 active:bg-neutral-200 hover:scale-105 focus:scale-105",
+              isKeyHighlighted(key, highlightedKey)
+                ? "bg-neutral-100"
+                : "bg-white",
+              isActionKey(key) && isLastRow ? "flex-[1.5]" : "flex-1",
+              isSecondRow && "second-row-margin flex-1"
+            )}
+            onClick={() => onClick(key)}
+          >
+            {getKey(key)}
+          </button>
         );
       })}
       {isSecondRow && <div className="flex-[0.5]"></div>}
@@ -112,7 +110,6 @@ export function KeyboardRow({
 
 export function Keyboard() {
   const [highlightedKey, setHighlightedKey] = useState("");
-  const timeoutRef = useRef<number | null>(null);
   const dispatch = useGameDispatch();
 
   useEffect(() => {
@@ -132,7 +129,7 @@ export function Keyboard() {
         e.key === "Backspace" ? "BACK" : e.key === "Enter" ? "ENTER" : e.key;
       setHighlightedKey(hKey);
 
-      timeoutRef.current = setTimeout(() => {
+      setTimeout(() => {
         setHighlightedKey("");
       }, 250);
 
@@ -156,10 +153,6 @@ export function Keyboard() {
 
     return () => {
       window.removeEventListener("keydown", handleKeyDown);
-
-      if (timeoutRef.current) {
-        clearTimeout(timeoutRef.current);
-      }
     };
   }, [dispatch]);
 
