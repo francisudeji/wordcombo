@@ -7,10 +7,11 @@ export interface GameState {
     target: string;
   };
   message: string;
+  paused: boolean;
 }
 
 export interface GameActions {
-  type: "message" | "clicked_key";
+  type: "message" | "key_clicked" | "toggle_paused";
   payload?: string;
 }
 

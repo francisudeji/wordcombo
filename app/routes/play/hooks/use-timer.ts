@@ -1,4 +1,5 @@
-import { useEffect, useRef, useState } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
+import { useGameDispatch, useGameState } from "./use-game";
 
 const ONE_HOUR = 60 * 60;
 
@@ -11,9 +12,21 @@ export function formatTime(time: number) {
 
 export function useTimer(defaultTime = 0) {
   const [time, setTime] = useState(defaultTime);
+  const globalIsPaused = useGameState<"paused">((state) => state.paused);
   const rafId = useRef<number | null>(null);
+  const lastElapsed = useRef<number>(0);
+  const dispatch = useGameDispatch();
 
-  useEffect(() => {
+  const pauseTimer = useCallback(() => {
+    if (rafId.current) {
+      cancelAnimationFrame(rafId.current);
+      rafId.current = null;
+    }
+    lastElapsed.current = time; // Save the current time so we can resume from it
+    dispatch({ type: "toggle_paused" });
+  }, [time, dispatch]);
+
+  const resumeTimer = useCallback(() => {
     function getTime() {
       if (
         typeof performance !== "undefined" &&
@@ -29,7 +42,7 @@ export function useTimer(defaultTime = 0) {
 
     function update() {
       const elapsed = getTime() - startTime;
-      const seconds = Math.floor(elapsed / 1000);
+      const seconds = Math.floor(elapsed / 1000) + lastElapsed.current;
 
       setTime((prevTime) => {
         if (prevTime >= ONE_HOUR && rafId.current) {
@@ -43,6 +56,14 @@ export function useTimer(defaultTime = 0) {
     }
 
     rafId.current = requestAnimationFrame(update);
+  }, []);
+
+  if (globalIsPaused) {
+    resumeTimer();
+  }
+
+  useEffect(() => {
+    resumeTimer();
 
     return () => {
       if (rafId.current) {
@@ -50,7 +71,12 @@ export function useTimer(defaultTime = 0) {
         rafId.current = null;
       }
     };
-  }, []);
+  }, [resumeTimer]);
 
-  return formatTime(time);
+  return {
+    time: formatTime(time),
+    pauseTimer,
+    resumeTimer,
+    isPaused: globalIsPaused,
+  };
 }

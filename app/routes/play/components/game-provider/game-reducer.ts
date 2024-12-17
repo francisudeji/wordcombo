@@ -19,7 +19,12 @@ export function gameReducer(state: GameState, action: GameActions) {
     case "message": {
       return { ...state, message: action.payload as string };
     }
-    case "clicked_key": {
+
+    case "toggle_paused": {
+      return { ...state, paused: !state.paused };
+    }
+
+    case "key_clicked": {
       if (action.payload === "BACK") {
         if (state.currentWord.length === 0) {
           return state;
@@ -84,6 +89,10 @@ export function gameReducer(state: GameState, action: GameActions) {
           currentWord: [],
           board,
         } satisfies GameState;
+      }
+
+      if (state.paused) {
+        return { ...state, message: "Game is paused. Press play to continue." };
       }
 
       if (state.currentWord.length === state.count) {

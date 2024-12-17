@@ -9,6 +9,7 @@ const initialState = {
   currentWord: [],
   wordsOfTheDay: { start: "HELLO", target: "WORLD" },
   message: "",
+  paused: false,
 } satisfies GameState;
 
 export const GameStateContext = createContext<GameState>(initialState);
@@ -44,7 +45,7 @@ export function GameProvider({ children }: { children: React.ReactNode }) {
   }, [state.message]);
 
   function customDispatch(action: GameActions) {
-    // if (action.type === "clicked_key") {
+    // if (action.type === "key_clicked") {
     //   if (action.payload === "ENTER") {
     //     window.dispatchEvent(
     //       new CustomEvent("ENTER_KEY_ACTION", {

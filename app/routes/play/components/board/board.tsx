@@ -1,15 +1,18 @@
 import { useGameState } from "../../hooks/use-game";
 import { cn } from "../../../../lib/utils";
 import { getHighlightedColour } from "./utils";
+import { Paused } from "./paused";
 
 export function Board() {
-  const { board, wordsOfTheDay } = useGameState<["board", "wordsOfTheDay"]>(
-    (state) => ({
-      board: state.board,
-      currentWord: state.currentWord,
-      wordsOfTheDay: state.wordsOfTheDay,
-    })
-  );
+  const { board, wordsOfTheDay, paused } = useGameState<
+    ["board", "wordsOfTheDay", "paused"]
+  >((state) => ({
+    board: state.board,
+    wordsOfTheDay: state.wordsOfTheDay,
+    paused: state.paused,
+  }));
+
+  if (paused) return <Paused />;
 
   return (
     <div className="flex flex-col px-4 w-full sm:w-3/4 mx-auto rounded-md min-h-full justify-end gap-4">
