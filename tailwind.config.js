@@ -22,6 +22,33 @@ export default {
         "10xl": "20480px",
       },
     },
+    animation: {
+      none: "none",
+      spin: "spin 1s linear infinite",
+      ping: "ping 1s cubic-bezier(0, 0, 0.2, 1) infinite",
+      pulse: "pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite",
+      bounce: "bounce 1s infinite",
+      wiggle: "wiggle 0.1s cubic-bezier(0.36, 0.07, 0.19, 1.0) 3 alternate",
+    },
+    keyframes: {
+      wiggle: {
+        "0%, 100%": {
+          transform: "translateX(0)",
+        },
+        "25%": {
+          transform: "translateX(-5px)",
+        },
+        "50%": {
+          transform: "translateX(5px)",
+        },
+        "75%": {
+          transform: "translateX(-5px)",
+        },
+        "100%": {
+          transform: "translateX(0)",
+        },
+      },
+    },
   },
   plugins: [],
 };

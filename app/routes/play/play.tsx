@@ -23,12 +23,7 @@ export default function Play() {
           </div>
         </div>
         <div className="sticky inset-0 bottom-0 bottom-half justify-end space-y-4 py-2 px-2 border-t sm:border sm:rounded-lg">
-          <div className="grid grid-cols-1 place-items-center">
-            <div className="flex items-center justify-center bg-white border rounded-3xl p-4 space-x-4 shadow-lg shadow-neutral-200 -mt-[50px]">
-              <CurrentWord />
-            </div>
-          </div>
-
+          <CurrentWord />
           <Keyboard />
         </div>
       </div>
