@@ -1,10 +1,7 @@
 import { IconButton } from "../../components/button/icon-button";
-import { useTimer } from "../../hooks/use-timer";
-
-export function Timer() {
-  const timer = useTimer();
-  return <p className="text-sm tabular-nums text-pretty">{timer}</p>;
-}
+import { WordsOfTheDay } from "../words-of-the-day/words-of-the-day";
+import { ClientOnly } from "./client-only";
+import { Timer } from "./timer";
 
 export function Header() {
   return (
@@ -26,7 +23,11 @@ export function Header() {
             />
           </svg>
         </IconButton>
-        <Timer />
+        <ClientOnly>
+          {() => {
+            return <Timer />;
+          }}
+        </ClientOnly>
         <IconButton title="Back">
           <svg
             xmlns="http://www.w3.org/2000/svg"
@@ -45,56 +46,7 @@ export function Header() {
         </IconButton>
       </div>
 
-      <div className="grid grid-cols-1 place-items-center absolute top-0 left-0 w-full">
-        <div className="flex items-center justify-center bg-white border rounded-2xl p-2 space-x-2 sm:space-x-4 shadow  mt-[50px]">
-          <span className="text-sm p-2 rounded-lg border border-dashed font-medium h-[24px] w-[24px] flex items-center justify-center">
-            H
-          </span>
-          <span className="text-sm p-2 rounded-lg border border-dashed font-medium h-[24px] w-[24px] flex items-center justify-center">
-            E
-          </span>
-          <span className="text-sm p-2 rounded-lg border border-dashed font-medium h-[24px] w-[24px] flex items-center justify-center">
-            L
-          </span>
-          <span className="text-sm p-2 rounded-lg border border-dashed font-medium h-[24px] w-[24px] flex items-center justify-center">
-            L
-          </span>
-          <span className="text-sm p-2 rounded-lg border border-dashed font-medium h-[24px] w-[24px] flex items-center justify-center">
-            O
-          </span>
-          <span>
-            <svg
-              xmlns="http://www.w3.org/2000/svg"
-              fill="none"
-              viewBox="0 0 24 24"
-              strokeWidth="1.5"
-              stroke="currentColor"
-              className="w-6 h-6"
-            >
-              <path
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                d="M17.25 8.25L21 12m0 0l-3.75 3.75M21 12H3"
-              />
-            </svg>
-          </span>
-          <span className="text-sm p-2 rounded-lg border border-dashed font-medium h-[24px] w-[24px] flex items-center justify-center">
-            W
-          </span>
-          <span className="text-sm p-2 rounded-lg border border-dashed font-medium h-[24px] w-[24px] flex items-center justify-center">
-            O
-          </span>
-          <span className="text-sm p-2 rounded-lg border border-dashed font-medium h-[24px] w-[24px] flex items-center justify-center">
-            R
-          </span>
-          <span className="text-sm p-2 rounded-lg border border-dashed font-medium h-[24px] w-[24px] flex items-center justify-center">
-            L
-          </span>
-          <span className="text-sm p-2 rounded-lg border border-dashed font-medium h-[24px] w-[24px] flex items-center justify-center">
-            D
-          </span>
-        </div>
-      </div>
+      <WordsOfTheDay />
     </header>
   );
 }
