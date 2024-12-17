@@ -4,9 +4,7 @@ import { getHighlightedColour } from "./utils";
 import { Paused } from "./paused";
 
 export function Board() {
-  const { board, wordsOfTheDay, paused } = useGameState<
-    ["board", "wordsOfTheDay", "paused"]
-  >((state) => ({
+  const { board, wordsOfTheDay, paused } = useGameState((state) => ({
     board: state.board,
     wordsOfTheDay: state.wordsOfTheDay,
     paused: state.paused,

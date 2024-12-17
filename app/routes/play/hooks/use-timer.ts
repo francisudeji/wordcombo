@@ -12,7 +12,7 @@ export function formatTime(time: number) {
 
 export function useTimer(defaultTime = 0) {
   const [time, setTime] = useState(defaultTime);
-  const globalIsPaused = useGameState<"paused">((state) => state.paused);
+  const globalIsPaused = useGameState((state) => state.paused);
   const rafId = useRef<number | null>(null);
   const lastElapsed = useRef<number>(0);
   const dispatch = useGameDispatch();

@@ -1,7 +1,7 @@
 import { useGameState } from "../../hooks/use-game";
 
 export function CurrentWord() {
-  const currentWord = useGameState<"currentWord">((state) => state.currentWord);
+  const currentWord = useGameState((state) => state.currentWord);
 
   return Array.from({ length: 5 }).map((_, index) => {
     return (

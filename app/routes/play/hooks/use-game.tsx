@@ -3,9 +3,9 @@ import {
   GameStateContext,
   GameDispatchContext,
 } from "../components/game-provider/game-provider";
-import type { Selector, SelectorKey } from "../components/game-provider/types";
+import type { GameState } from "../components/game-provider/types";
 
-export function useGameState<T extends SelectorKey>(selector: Selector<T>) {
+export function useGameState<T>(selector: (state: GameState) => T): T {
   const state = useContext(GameStateContext);
 
   if (state === undefined) {

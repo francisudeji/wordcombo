@@ -2,14 +2,12 @@ import { useGameState } from "../../hooks/use-game";
 import { WordOfTheDay } from "./word-of-the-day";
 
 export function WordsOfTheDay() {
-  const { wordsOfTheDay, paused } = useGameState<["wordsOfTheDay", "paused"]>(
-    (state) => {
-      return {
-        wordsOfTheDay: state.wordsOfTheDay,
-        paused: state.paused,
-      };
-    }
-  );
+  const { wordsOfTheDay, paused } = useGameState((state) => {
+    return {
+      wordsOfTheDay: state.wordsOfTheDay,
+      paused: state.paused,
+    };
+  });
 
   const { start, target } = wordsOfTheDay;
 
