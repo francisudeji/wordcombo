@@ -8,9 +8,18 @@ export interface GameState {
   };
   message: string;
   paused: boolean;
+  cursor: number;
 }
 
-export interface GameActions {
-  type: "message" | "key_clicked" | "toggle_paused";
-  payload?: string;
+interface GameActionType {
+  message: string;
+  key_clicked: string;
+  toggle_paused: boolean;
 }
+
+export type GameActions = {
+  [K in keyof GameActionType]: {
+    type: K;
+    payload: GameActionType[K];
+  };
+}[keyof GameActionType];
