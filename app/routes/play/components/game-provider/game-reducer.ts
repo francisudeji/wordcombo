@@ -25,21 +25,26 @@ export function gameReducer(state: GameState, action: GameActions) {
     }
 
     case "key_clicked": {
-      if (action.payload === "BACK") {
+      if (action.payload === "Backspace") {
         if (state.currentWord.length === 0) {
           return state;
         }
 
+        const newCurrentWord = [...state.currentWord];
+        newCurrentWord[state.cursor] = "";
+
         return {
           ...state,
-          currentWord: state.currentWord.slice(0, state.currentWord.length - 1),
+          currentWord: newCurrentWord,
+          cursor: state.cursor <= 0 ? state.cursor : state.cursor - 1,
         } satisfies GameState;
       }
 
-      if (action.payload === "ENTER") {
+      if (action.payload === "Enter") {
         const lastEntry =
           Array.from(state.board.entries()).at(-1)?.[1] ??
           state.wordsOfTheDay.start.split("");
+
         /**
          * Validation checks
          * 1. Word is not complete
@@ -87,25 +92,43 @@ export function gameReducer(state: GameState, action: GameActions) {
         return {
           ...state,
           currentWord: [],
+          cursor: 0,
           board,
         } satisfies GameState;
+      }
+
+      if (action.payload === "ArrowLeft") {
+        return {
+          ...state,
+          cursor: state.cursor <= 0 ? state.cursor : state.cursor - 1,
+        };
+      }
+
+      if (action.payload === "ArrowRight") {
+        return {
+          ...state,
+          cursor:
+            state.cursor >= state.count - 1 ? state.cursor : state.cursor + 1,
+        };
       }
 
       if (state.paused) {
         return { ...state, message: "Game is paused. Press play to continue." };
       }
 
-      if (state.currentWord.length === state.count) {
-        return state;
-      }
+      const newCurrentWord = [...state.currentWord];
+      newCurrentWord[state.cursor] = action.payload as string;
 
       return {
         ...state,
-        currentWord: [...state.currentWord, action.payload as string],
+        currentWord: newCurrentWord,
+        cursor:
+          state.cursor >= state.count - 1 ? state.cursor : state.cursor + 1,
       } satisfies GameState;
     }
     default: {
-      throw new Error(`Unhandled action type: ${action.type}`);
+      const type: never = action satisfies never;
+      throw new Error("Unhandled action type: ", type);
     }
   }
 }
