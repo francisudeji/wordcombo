@@ -25,20 +25,8 @@ export function Keyboard() {
         return;
       }
 
-      const hKey =
-        e.key === "Backspace" ? "BACK" : e.key === "Enter" ? "ENTER" : e.key;
-      setHighlightedKey(hKey);
-
-      setTimeout(() => {
-        setHighlightedKey("");
-      }, 250);
-
-      if (e.key === "Backspace") {
-        return dispatch({ type: "key_clicked", payload: "BACK" });
-      }
-
-      if (e.key === "Enter") {
-        return dispatch({ type: "key_clicked", payload: "ENTER" });
+      if (["Backspace", "Enter", "ArrowLeft", "ArrowRight"].includes(e.key)) {
+        return dispatch({ type: "key_clicked", payload: e.key });
       }
 
       // For A-Z
@@ -47,6 +35,14 @@ export function Keyboard() {
       if (validKeys.has(key)) {
         dispatch({ type: "key_clicked", payload: e.key.toUpperCase() });
       }
+
+      const hKey =
+        e.key === "Backspace" ? "BACK" : e.key === "Enter" ? "ENTER" : e.key;
+      setHighlightedKey(hKey);
+
+      setTimeout(() => {
+        setHighlightedKey("");
+      }, 250);
     }
 
     document.addEventListener("keydown", handleKeyDown);
