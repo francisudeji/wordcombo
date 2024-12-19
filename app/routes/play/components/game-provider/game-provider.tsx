@@ -10,6 +10,7 @@ const initialState = {
   wordsOfTheDay: { start: "HELLO", target: "WORLD" },
   message: "",
   paused: false,
+  cursor: 0,
 } satisfies GameState;
 
 export const GameStateContext = createContext<GameState>(initialState);

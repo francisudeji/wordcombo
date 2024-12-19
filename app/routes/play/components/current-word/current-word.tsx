@@ -2,10 +2,11 @@ import { cn } from "~/lib/utils";
 import { useGameState } from "../../hooks/use-game";
 
 export function CurrentWord() {
-  const { currentWord, message, count } = useGameState((state) => ({
+  const { currentWord, message, count, cursor } = useGameState((state) => ({
     currentWord: state.currentWord,
     message: state.message,
     count: state.count,
+    cursor: state.cursor,
   }));
 
   return (
@@ -20,7 +21,12 @@ export function CurrentWord() {
           return (
             <span
               key={index}
-              className="text-xl py-2 px-4 rounded-lg border border-dashed font-medium h-[50px] w-[50px] flex items-center justify-center transform transition-transform duration-200 hover:scale-105"
+              className={cn(
+                "text-xl py-2 px-4 rounded-lg border border-dashed font-medium h-[50px] w-[50px] flex items-center justify-center transform transition-transform duration-200 hover:scale-105",
+                {
+                  "border-indigo-300": index === cursor,
+                }
+              )}
             >
               {currentWord[index] ?? " "}
             </span>
