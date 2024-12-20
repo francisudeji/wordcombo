@@ -27,6 +27,8 @@ export function CurrentWord() {
         {Array.from({ length: count }).map((_, index) => {
           return (
             <span
+              role="textbox"
+              tabIndex={0}
               draggable={currentWord[index] !== undefined}
               onDragStart={(e) => {
                 if (currentWord[index] === undefined) {
@@ -35,11 +37,15 @@ export function CurrentWord() {
                   return;
                 }
 
+                e.currentTarget.classList.add("bg-white");
+
                 e.dataTransfer.setData(
                   "text/current-letter",
                   currentWord[index]
                 );
+
                 e.dataTransfer.dropEffect = "move";
+
                 dispatch({
                   type: "drag_started",
                   payload: index,
@@ -84,12 +90,20 @@ export function CurrentWord() {
               }}
               key={index}
               className={cn(
-                "text-xl py-2 px-4 rounded-lg border border-dashed font-medium h-[50px] w-[50px] flex items-center justify-center transform transition-transform duration-200 hover:scale-105",
+                "text-xl py-2 px-4 rounded-lg border border-dashed font-medium h-[50px] w-[50px] flex items-center justify-center transform transition-transform duration-200 hover:scale-105 outline-none",
                 {
                   "border-indigo-300": index === cursor,
                   "text-transparent": draggedOverElIndex === index,
                 }
               )}
+              onFocus={(e) => {
+                e.target.classList.add("border-indigo-300");
+                dispatch({ type: "cursor_moved", payload: index });
+              }}
+              onClick={(e) => {
+                e.currentTarget.focus();
+                dispatch({ type: "cursor_moved", payload: index });
+              }}
             >
               {currentWord[index] ?? " "}
             </span>

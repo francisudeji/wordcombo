@@ -25,7 +25,23 @@ export function Keyboard() {
         return;
       }
 
-      if (["BACK", "ENTER", "ArrowLeft", "ArrowRight"].includes(e.key)) {
+      if (
+        [
+          "BACK", // BACK comes from the onscreen keyboard
+          "ENTER", // ENTER comes from the onscreen keyboard
+          "Backspace",
+          "Enter",
+          "ArrowLeft",
+          "ArrowRight",
+        ].includes(e.key)
+      ) {
+        if (
+          e.key === "Enter" &&
+          (document.activeElement as HTMLElement).tagName === "BUTTON"
+        ) {
+          return;
+        }
+
         return dispatch({ type: "key_clicked", payload: e.key });
       }
 

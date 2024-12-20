@@ -53,7 +53,7 @@ export function gameReducer(state: GameState, action: GameActions) {
     }
 
     case "key_clicked": {
-      if (action.payload === "BACK") {
+      if (action.payload.toLocaleLowerCase().startsWith("back")) {
         if (state.currentWord.length === 0) {
           return state;
         }
@@ -68,7 +68,7 @@ export function gameReducer(state: GameState, action: GameActions) {
         } satisfies GameState;
       }
 
-      if (action.payload === "ENTER") {
+      if (action.payload.toLocaleLowerCase().startsWith("enter")) {
         const lastEntry =
           Array.from(state.board.entries()).at(-1)?.[1] ??
           state.wordsOfTheDay.start.split("");
