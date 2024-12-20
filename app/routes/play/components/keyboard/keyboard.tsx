@@ -25,7 +25,7 @@ export function Keyboard() {
         return;
       }
 
-      if (["Backspace", "Enter", "ArrowLeft", "ArrowRight"].includes(e.key)) {
+      if (["BACK", "ENTER", "ArrowLeft", "ArrowRight"].includes(e.key)) {
         return dispatch({ type: "key_clicked", payload: e.key });
       }
 
