@@ -15,6 +15,10 @@ interface GameActionType {
   message: string;
   key_clicked: string;
   toggle_paused: boolean;
+  cursor_moved: number;
+  drag_started: number;
+  drag_overed: number;
+  drag_dropped: { index: number; letter: string };
 }
 
 export type GameActions = {
