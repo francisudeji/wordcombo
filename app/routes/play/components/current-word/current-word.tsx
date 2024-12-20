@@ -29,8 +29,9 @@ export function CurrentWord() {
             <span
               draggable={currentWord[index] !== undefined}
               onDragStart={(e) => {
+                e.preventDefault();
+
                 if (currentWord[index] === undefined) {
-                  e.preventDefault();
                   e.dataTransfer.effectAllowed = "none";
                   return;
                 }
