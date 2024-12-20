@@ -17,7 +17,35 @@ function isOffByOne(from: string, to: string) {
 export function gameReducer(state: GameState, action: GameActions) {
   switch (action.type) {
     case "message": {
-      return { ...state, message: action.payload as string };
+      return { ...state, message: action.payload };
+    }
+
+    case "cursor_moved": {
+      return { ...state, cursor: action.payload };
+    }
+
+    case "drag_started": {
+      return { ...state, cursor: action.payload };
+    }
+
+    case "drag_overed": {
+      const newCurrentWord = [...state.currentWord];
+      newCurrentWord[action.payload] = state.currentWord[state.cursor];
+      newCurrentWord[state.cursor] = state.currentWord[action.payload];
+      return {
+        ...state,
+        currentWord: newCurrentWord,
+        cursor: action.payload,
+      };
+    }
+
+    case "drag_dropped": {
+      const newCurrentWord = [...state.currentWord];
+      newCurrentWord[action.payload.index] = action.payload.letter;
+      return {
+        ...state,
+        currentWord: newCurrentWord,
+      };
     }
 
     case "toggle_paused": {
@@ -117,7 +145,7 @@ export function gameReducer(state: GameState, action: GameActions) {
       }
 
       const newCurrentWord = [...state.currentWord];
-      newCurrentWord[state.cursor] = action.payload as string;
+      newCurrentWord[state.cursor] = action.payload;
 
       return {
         ...state,
