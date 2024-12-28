@@ -1,6 +1,6 @@
 import type { GameActions, GameState } from "./types";
 
-function isOffByOne(from: string, to: string) {
+function hasOnlyOneLetterChanged(from: string, to: string) {
   const changedLetters = [];
 
   for (let i = 0; i < from.length; i++) {
@@ -11,7 +11,7 @@ function isOffByOne(from: string, to: string) {
     }
   }
 
-  return changedLetters.length === 0 || changedLetters.length === 1;
+  return changedLetters.length === 1;
 }
 
 export function gameReducer(state: GameState, action: GameActions) {
@@ -59,12 +59,22 @@ export function gameReducer(state: GameState, action: GameActions) {
         }
 
         const newCurrentWord = [...state.currentWord];
-        newCurrentWord[state.cursor] = "";
+
+        if (newCurrentWord[state.cursor]?.length > 0) {
+          newCurrentWord[state.cursor] = "";
+          return {
+            ...state,
+            currentWord: newCurrentWord,
+          };
+        }
+
+        const newCursor = state.cursor <= 0 ? state.cursor : state.cursor - 1;
+        newCurrentWord[newCursor] = "";
 
         return {
           ...state,
           currentWord: newCurrentWord,
-          cursor: state.cursor <= 0 ? state.cursor : state.cursor - 1,
+          cursor: newCursor,
         } satisfies GameState;
       }
 
@@ -77,7 +87,10 @@ export function gameReducer(state: GameState, action: GameActions) {
          * Validation checks
          * 1. Word is not complete
          */
-        if (state.currentWord.length !== state.count) {
+        const isWordComplete = state.currentWord.every(
+          (letter) => letter !== ""
+        );
+        if (!isWordComplete) {
           return { ...state, message: "Word is not complete" };
         }
 
@@ -108,7 +121,12 @@ export function gameReducer(state: GameState, action: GameActions) {
          * Validation checks
          * 4. Changed more than one letter
          */
-        if (!isOffByOne(lastEntry.join(""), state.currentWord.join(""))) {
+        if (
+          !hasOnlyOneLetterChanged(
+            lastEntry.join(""),
+            state.currentWord.join("")
+          )
+        ) {
           return { ...state, message: "Can only swap one letter at a time" };
         }
 
