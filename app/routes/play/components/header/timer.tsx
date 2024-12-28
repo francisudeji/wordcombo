@@ -1,11 +1,11 @@
 import { IconButton } from "../../components/button/icon-button";
 import { useTimer } from "../../hooks/use-timer";
 
-export function Timer() {
-  const timer = useTimer();
+export function Timer({ paused }: { paused: boolean }) {
+  const timer = useTimer(0, paused);
   return (
     <div className="flex items-center space-x-2">
-      {!timer.isPaused && (
+      {!paused && (
         <IconButton
           title="toggle timer"
           className="px-2"

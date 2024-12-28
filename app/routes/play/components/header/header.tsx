@@ -1,9 +1,11 @@
 import { IconButton } from "../../components/button/icon-button";
+import { useGameState } from "../../hooks/use-game";
 import { WordsOfTheDay } from "../words-of-the-day/words-of-the-day";
 import { ClientOnly } from "./client-only";
 import { Timer } from "./timer";
 
 export function Header() {
+  const paused = useGameState((state) => state.paused);
   return (
     <header className="sticky inset-0 bg-white top-0 header py-1 border-b sm:border sm:rounded-md px-2">
       <div className="flex items-center justify-between ">
@@ -25,7 +27,7 @@ export function Header() {
         </IconButton>
         <ClientOnly>
           {() => {
-            return <Timer />;
+            return <Timer paused={paused} />;
           }}
         </ClientOnly>
         <IconButton title="Back">
