@@ -1,12 +1,10 @@
-import { theme } from "tailwindcss/defaultConfig";
-
 /** @type {import('tailwindcss').Config} */
 export default {
   content: ["./app/**/*.{js,ts,jsx,tsx}"],
   theme: {
     extend: {
       screens: {
-        xs: "320px",
+        xs: "450px",
         sm: "512px",
         md: "768px",
         lg: "1024px",
@@ -27,12 +25,27 @@ export default {
       spin: "spin 1s linear infinite",
       ping: "ping 1s cubic-bezier(0, 0, 0.2, 1) infinite",
       pulse: "pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite",
-      bounce: "bounce 1s infinite",
       wiggle: "wiggle 0.1s cubic-bezier(0.36, 0.07, 0.19, 1.0) 3 alternate",
+      punchy1: "punchy 0.6s ease-in-out 1 0s",
+      punchy2: "punchy 0.6s ease-in-out 1 0.1s",
+      punchy3: "punchy 0.6s ease-in-out 1 0.2s",
+      punchy4: "punchy 0.6s ease-in-out 1 0.4s",
+      punchy5: "punchy 0.6s ease-in-out 1 0.5s",
     },
     keyframes: {
+      punchy: {
+        "0%": {
+          transform: "scale(0.8) translateY(-10px)",
+        },
+        "50%": {
+          transform: "scale(1.2) translateY(5px)",
+        },
+        "100%": {
+          transform: "scale(1) translateY(0)",
+        },
+      },
       wiggle: {
-        "0%, 100%": {
+        "0%": {
           transform: "translateX(0)",
         },
         "25%": {
