@@ -27,8 +27,8 @@ export function Keyboard() {
 
       if (
         [
-          "BACK", // BACK comes from the onscreen keyboard
-          "ENTER", // ENTER comes from the onscreen keyboard
+          // "BACK", // BACK comes from the onscreen keyboard
+          // "ENTER", // ENTER comes from the onscreen keyboard
           "Backspace",
           "Enter",
           "ArrowLeft",
@@ -37,7 +37,7 @@ export function Keyboard() {
       ) {
         if (
           e.key === "Enter" &&
-          (document.activeElement as HTMLElement).tagName === "BUTTON"
+          (document.activeElement as HTMLElement).tagName === "BUTTON" // Prevents the enter key from submitting the form if a button on the on-screen keyboard is focused
         ) {
           return;
         }

@@ -3,7 +3,7 @@ export function WordOfTheDay({ word }: { word: string }) {
     return (
       <span
         key={index}
-        className="text-sm p-2 rounded-lg border border-dashed font-medium h-[24px] w-[24px] flex items-center justify-center"
+        className="text-xs p-2 rounded-lg border border-dashed font-medium h-[24px] w-[24px] flex items-center justify-center"
       >
         {letter}
       </span>

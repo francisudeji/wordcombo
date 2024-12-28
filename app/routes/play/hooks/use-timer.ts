@@ -1,5 +1,5 @@
 import { useCallback, useEffect, useRef, useState } from "react";
-import { useGameDispatch, useGameState } from "./use-game";
+import { useGameDispatch } from "./use-game";
 
 const ONE_HOUR = 60 * 60;
 
@@ -10,9 +10,8 @@ export function formatTime(time: number) {
   return `${minutes}:${seconds}`;
 }
 
-export function useTimer(defaultTime = 0) {
+export function useTimer(defaultTime = 0, isPaused = false) {
   const [time, setTime] = useState(defaultTime);
-  const globalIsPaused = useGameState((state) => state.paused);
   const rafId = useRef<number | null>(null);
   const lastElapsed = useRef<number>(0);
   const dispatch = useGameDispatch();
@@ -23,7 +22,7 @@ export function useTimer(defaultTime = 0) {
       rafId.current = null;
     }
     lastElapsed.current = time; // Save the current time so we can resume from it
-    dispatch({ type: "toggle_paused" });
+    dispatch({ type: "toggle_paused", payload: true });
   }, [time, dispatch]);
 
   const resumeTimer = useCallback(() => {
@@ -58,7 +57,7 @@ export function useTimer(defaultTime = 0) {
     rafId.current = requestAnimationFrame(update);
   }, []);
 
-  if (globalIsPaused) {
+  if (isPaused) {
     resumeTimer();
   }
 
@@ -77,6 +76,6 @@ export function useTimer(defaultTime = 0) {
     time: formatTime(time),
     pauseTimer,
     resumeTimer,
-    isPaused: globalIsPaused,
+    isPaused,
   };
 }

@@ -15,7 +15,7 @@ export function WordsOfTheDay() {
 
   return (
     <div className="grid grid-cols-1 place-items-center absolute top-0 left-0 w-full pointer-events-none">
-      <div className="flex items-center justify-center bg-white border rounded-2xl p-2 space-x-2 sm:space-x-4 shadow  mt-[50px]">
+      <div className="flex items-center justify-center bg-white border rounded-2xl p-2 space-x-2 sm:space-x-4 shadow mt-[50px]">
         <WordOfTheDay word={start} />
         <span>
           <svg
