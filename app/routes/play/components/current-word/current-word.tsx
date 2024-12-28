@@ -17,10 +17,10 @@ export function CurrentWord() {
   const dispatch = useGameDispatch();
 
   return (
-    <div className="grid grid-cols-1 place-items-center ">
+    <div className="xs:w-3/4 sm:w-2/3 grid grid-cols-1 mx-auto px-2 sm:px-0">
       <div
         className={cn(
-          "flex items-center justify-center bg-white border rounded-3xl p-4 space-x-4 shadow-lg shadow-neutral-200 -mt-[50px]",
+          "flex justify-between bg-white border rounded-3xl p-4 space-x-4 shadow-lg shadow-neutral-200 -mt-[50px]",
           message ? "animate-wiggle" : ""
         )}
       >
@@ -90,9 +90,9 @@ export function CurrentWord() {
               }}
               key={index}
               className={cn(
-                "text-xl py-2 px-4 rounded-lg border border-dashed font-medium h-[50px] w-[50px] flex items-center justify-center transform transition-transform duration-200 hover:scale-105 outline-none",
+                "text-xl py-2 px-4 rounded-lg border border-dashed border-neutral-300 font-medium h-[50px] w-[50px] flex items-center justify-center transform transition-transform duration-200 hover:scale-105 outline-none",
                 {
-                  "border-indigo-300": index === cursor,
+                  "border-neutral-500": index === cursor,
                   "text-transparent": draggedOverElIndex === index,
                 }
               )}
