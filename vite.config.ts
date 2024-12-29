@@ -9,7 +9,14 @@ export default defineConfig(({ isSsrBuild }) => ({
   build: {
     rollupOptions: isSsrBuild
       ? {
-          input: "./workers/app.ts",
+          // input: "./workers/app.ts",
+          input: {
+            "assets/server-build.js": "virtual:react-router/server-build",
+            "index.js": "./workers/app.ts",
+          },
+          output: {
+            entryFileNames: "[name]",
+          },
         }
       : undefined,
   },

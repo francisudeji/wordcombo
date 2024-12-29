@@ -2,5 +2,6 @@ import type { Config } from "@react-router/dev/config";
 
 export default {
   ssr: true,
-  prerender: ["/play"],
+  serverBuildFile: "assets/server-build.js",
+  prerender: true,
 } satisfies Config;
