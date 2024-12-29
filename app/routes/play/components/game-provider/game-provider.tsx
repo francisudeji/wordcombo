@@ -1,25 +1,52 @@
-import { createContext, useEffect, useReducer, useRef } from "react";
+import {
+  createContext,
+  useEffect,
+  useReducer,
+  useRef,
+  type PropsWithChildren,
+} from "react";
 import { type GameState, type GameActions } from "./types";
 import { toast } from "sonner";
 import { gameReducer } from "./game-reducer";
 
-const initialState = {
-  count: 5,
-  board: new Map(),
-  currentWord: [],
-  wordsOfTheDay: { start: "HELLO", target: "WORLD" },
-  message: "",
-  paused: false,
-  cursor: 0,
-} satisfies GameState;
+function createInitialState({
+  wordsOfTheDay,
+}: {
+  wordsOfTheDay: GameState["wordsOfTheDay"];
+}): GameState {
+  if (wordsOfTheDay.start.length !== wordsOfTheDay.target.length) {
+    throw new Error("Start and target words must be the same length");
+  }
 
-export const GameStateContext = createContext<GameState>(initialState);
+  return {
+    count: wordsOfTheDay.start.length,
+    board: new Map(),
+    currentWord: [],
+    wordsOfTheDay,
+    message: "",
+    paused: false,
+    cursor: 0,
+  } satisfies GameState;
+}
+
+export const GameStateContext = createContext<GameState | null>(null);
 export const GameDispatchContext = createContext<React.Dispatch<GameActions>>(
   () => null
 );
 
-export function GameProvider({ children }: { children: React.ReactNode }) {
-  const [state, dispatch] = useReducer(gameReducer, initialState);
+interface GameProviderProps {
+  wordsOfTheDay: { start: string; target: string };
+}
+
+export function GameProvider({
+  wordsOfTheDay,
+  children,
+}: PropsWithChildren<GameProviderProps>) {
+  const [state, dispatch] = useReducer(
+    gameReducer,
+    { wordsOfTheDay },
+    createInitialState
+  );
   const timer = useRef<number | null>(null);
 
   useEffect(() => {

@@ -10,9 +10,16 @@ export function meta(): Route.MetaDescriptors {
   return [{ title: "Play | WordCombo" }];
 }
 
-export default function Play() {
+export function loader() {
+  const wordsOfTheDay = { start: "HELLO", target: "WORLD" };
+  return { wordsOfTheDay };
+}
+
+export default function Play({ loaderData }: Route.ComponentProps) {
+  const { wordsOfTheDay } = loaderData;
+
   return (
-    <GameProvider>
+    <GameProvider wordsOfTheDay={wordsOfTheDay}>
       <Toaster />
       <div className="h-dvh py-1 flex-1 flex flex-col max-w-xl mx-auto">
         <div className="top-half flex-1 flex flex-col overflow-y-auto scroll-smooth relative">
