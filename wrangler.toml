@@ -1,5 +1,5 @@
 workers_dev = true
 name = "word-combo"
 compatibility_date = "2024-11-18"
-main = "./build/server/index.js"
+main = "./build/server/assets/server-build2.js"
 assets = { directory = "./build/client/" }
