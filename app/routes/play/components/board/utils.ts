@@ -5,7 +5,7 @@
  */
 type Status = "1" | "0" | "-1";
 
-function determineColour(guessWord: string, targetWord: string) {
+export function getStatus(guessWord: string, targetWord: string) {
   const result = Array<Status>(guessWord.length).fill("-1");
 
   const targetWordCharCount: Record<string, number> = {};
@@ -45,7 +45,7 @@ export function mapStatusToColour(status: Status) {
 }
 
 export function getHighlightedColour(guessWord: string, targetWord: string) {
-  return determineColour(guessWord, targetWord).map((status) =>
+  return getStatus(guessWord, targetWord).map((status) =>
     mapStatusToColour(status)
   );
 }
