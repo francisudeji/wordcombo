@@ -42,14 +42,14 @@ export function Keyboard() {
           return;
         }
 
-        return dispatch({ type: "key_clicked", payload: e.key });
+        return dispatch({ type: "keyClicked", payload: e.key });
       }
 
       // For A-Z
       const key = e.key.toUpperCase() as AlphabeticalKey;
 
       if (validKeys.has(key)) {
-        dispatch({ type: "key_clicked", payload: e.key.toUpperCase() });
+        dispatch({ type: "keyClicked", payload: e.key.toUpperCase() });
       }
 
       const hKey =
@@ -73,7 +73,7 @@ export function Keyboard() {
       {keyboardRows.map((row, index) => {
         return (
           <KeyboardRow
-            onClick={(key) => dispatch({ type: "key_clicked", payload: key })}
+            onClick={(key) => dispatch({ type: "keyClicked", payload: key })}
             row={row}
             key={index}
             highlightedKey={highlightedKey}

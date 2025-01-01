@@ -47,7 +47,7 @@ export function CurrentWord() {
                 e.dataTransfer.dropEffect = "move";
 
                 dispatch({
-                  type: "drag_started",
+                  type: "dragStarted",
                   payload: index,
                 });
               }}
@@ -61,7 +61,7 @@ export function CurrentWord() {
                 }
 
                 dispatch({
-                  type: "drag_overed",
+                  type: "dragHovered",
                   payload: index,
                 });
               }}
@@ -82,7 +82,7 @@ export function CurrentWord() {
                 const letter = e.dataTransfer.getData("text/current-letter");
 
                 dispatch({
-                  type: "drag_dropped",
+                  type: "dragDropped",
                   payload: { index, letter },
                 });
 
@@ -98,11 +98,11 @@ export function CurrentWord() {
               )}
               onFocus={(e) => {
                 e.target.classList.add("border-indigo-300");
-                dispatch({ type: "cursor_moved", payload: index });
+                dispatch({ type: "cursorMoved", payload: index });
               }}
               onClick={(e) => {
                 e.currentTarget.focus();
-                dispatch({ type: "cursor_moved", payload: index });
+                dispatch({ type: "cursorMoved", payload: index });
               }}
             >
               {currentWord[index] ?? " "}

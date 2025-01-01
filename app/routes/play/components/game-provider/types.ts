@@ -13,12 +13,12 @@ export interface GameState {
 
 interface GameActionType {
   message: string;
-  key_clicked: string;
-  toggle_paused: boolean;
-  cursor_moved: number;
-  drag_started: number;
-  drag_overed: number;
-  drag_dropped: { index: number; letter: string };
+  keyClicked: string;
+  pauseToggled: boolean;
+  cursorMoved: number;
+  dragStarted: number;
+  dragHovered: number;
+  dragDropped: { index: number; letter: string };
 }
 
 export type GameActions = {
