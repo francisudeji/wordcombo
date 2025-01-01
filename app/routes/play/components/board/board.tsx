@@ -12,6 +12,38 @@ export function Board() {
 
   if (paused) return <Paused />;
 
+  if (board.size === 0) {
+    return (
+      <div className="flex flex-col flex-1 justify-center items-center text-center">
+        <p className="text-sm text-neutral-500 flex items-center">
+          Press{" "}
+          <kbd className="font-mono border bg-neutral-50 rounded-md py-0.5 px-1 mx-1">
+            Enter
+          </kbd>{" "}
+          or
+          <kbd className="font-mono border bg-neutral-50 rounded-md py-0.5 px-1 mx-1">
+            {" "}
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              fill="none"
+              viewBox="0 0 24 24"
+              strokeWidth="1.5"
+              stroke="currentColor"
+              className="w-4 h-4"
+            >
+              <path
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                d="M4.5 12.75l6 6 9-13.5"
+              />
+            </svg>
+          </kbd>{" "}
+          to start
+        </p>
+      </div>
+    );
+  }
+
   return (
     <div className="flex flex-col xs:w-3/4 sm:px-4 w-full sm:w-3/4 mx-auto rounded-md min-h-full justify-end gap-4">
       {Array.from({ length: board.size })
@@ -31,8 +63,7 @@ export function Board() {
             />
           );
         })
-        .reverse()
-        .concat(<Word key="start" letters={wordsOfTheDay.start.split("")} />)}
+        .reverse()}
     </div>
   );
 }
