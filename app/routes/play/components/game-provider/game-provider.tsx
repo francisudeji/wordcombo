@@ -18,14 +18,16 @@ function createInitialState({
     throw new Error("Start and target words must be the same length");
   }
 
+  const board = new Map<string, string[]>();
+
   return {
     count: wordsOfTheDay.start.length,
-    board: new Map(),
-    currentWord: [],
+    board,
+    currentWord: [...wordsOfTheDay.start],
     wordsOfTheDay,
     message: "",
     paused: false,
-    cursor: 0,
+    cursor: board.size === 0 ? -1 : 0,
   } satisfies GameState;
 }
 
@@ -72,22 +74,9 @@ export function GameProvider({
     };
   }, [state.message]);
 
-  function customDispatch(action: GameActions) {
-    // if (action.type === "key_clicked") {
-    //   if (action.payload === "ENTER") {
-    //     window.dispatchEvent(
-    //       new CustomEvent("ENTER_KEY_ACTION", {
-    //         detail: { word: state.currentWord.join("") },
-    //       })
-    //     );
-    //   }
-    // }
-    dispatch(action);
-  }
-
   return (
     <GameStateContext.Provider value={state}>
-      <GameDispatchContext.Provider value={customDispatch}>
+      <GameDispatchContext.Provider value={dispatch}>
         {children}
       </GameDispatchContext.Provider>
     </GameStateContext.Provider>
