@@ -1,17 +1,10 @@
+import { getStatus } from "../board/utils";
 import type { GameActions, GameState } from "./types";
 
 function hasOnlyOneLetterChanged(from: string, to: string) {
-  const changedLetters = [];
+  const status = getStatus(from, to);
 
-  for (let i = 0; i < from.length; i++) {
-    if (from.includes(to[i])) {
-      continue;
-    } else {
-      changedLetters.push(to[i]);
-    }
-  }
-
-  return changedLetters.length === 1;
+  return status.filter((s) => s === "-1").length === 1;
 }
 
 export function gameReducer(state: GameState, action: GameActions) {
@@ -20,15 +13,18 @@ export function gameReducer(state: GameState, action: GameActions) {
       return { ...state, message: action.payload };
     }
 
-    case "cursor_moved": {
+    case "cursorMoved": {
+      return {
+        ...state,
+        cursor: state.board.size === 0 ? state.cursor : action.payload,
+      };
+    }
+
+    case "dragStarted": {
       return { ...state, cursor: action.payload };
     }
 
-    case "drag_started": {
-      return { ...state, cursor: action.payload };
-    }
-
-    case "drag_overed": {
+    case "dragHovered": {
       const newCurrentWord = [...state.currentWord];
       newCurrentWord[action.payload] = state.currentWord[state.cursor];
       newCurrentWord[state.cursor] = state.currentWord[action.payload];
@@ -39,7 +35,7 @@ export function gameReducer(state: GameState, action: GameActions) {
       };
     }
 
-    case "drag_dropped": {
+    case "dragDropped": {
       const newCurrentWord = [...state.currentWord];
       newCurrentWord[action.payload.index] = action.payload.letter;
       return {
@@ -48,12 +44,16 @@ export function gameReducer(state: GameState, action: GameActions) {
       };
     }
 
-    case "toggle_paused": {
+    case "pauseToggled": {
       return { ...state, paused: !state.paused };
     }
 
-    case "key_clicked": {
+    case "keyClicked": {
       if (action.payload.toLocaleLowerCase().startsWith("back")) {
+        if (state.board.size === 0) {
+          return state;
+        }
+
         if (state.currentWord.length === 0) {
           return state;
         }
@@ -61,7 +61,7 @@ export function gameReducer(state: GameState, action: GameActions) {
         const newCurrentWord = [...state.currentWord];
 
         if (newCurrentWord[state.cursor]?.length > 0) {
-          newCurrentWord[state.cursor] = "";
+          newCurrentWord.splice(state.cursor, 1);
           return {
             ...state,
             currentWord: newCurrentWord,
@@ -69,7 +69,7 @@ export function gameReducer(state: GameState, action: GameActions) {
         }
 
         const newCursor = state.cursor <= 0 ? state.cursor : state.cursor - 1;
-        newCurrentWord[newCursor] = "";
+        newCurrentWord.splice(newCursor, 1);
 
         return {
           ...state,
@@ -85,36 +85,34 @@ export function gameReducer(state: GameState, action: GameActions) {
 
         /**
          * Validation checks
-         * 1. Word is not complete
+         * 1. First word is not the start word
          */
-        const isWordComplete = state.currentWord.every(
-          (letter) => letter !== ""
-        );
-        if (!isWordComplete) {
-          return { ...state, message: "Word is not complete" };
-        }
 
+        if (
+          state.board.size === 0 &&
+          state.currentWord.join("") !== state.wordsOfTheDay.start
+        ) {
+          return { ...state, message: "First word must not be the start word" };
+        }
         /**
          * Validation checks
          * 2. Word already exists
          */
         const wordAlreadyExists =
           state.board.has(state.currentWord.join("")) ||
-          state.wordsOfTheDay.start === state.currentWord.join("") ||
-          state.wordsOfTheDay.target === state.currentWord.join("");
+          (state.wordsOfTheDay.start === state.currentWord.join("") &&
+            state.board.size > 0);
 
         if (wordAlreadyExists) {
           return { ...state, message: "Word already exists" };
         }
 
-        // TODO: Check if word is in dictionary
-
         /**
          * Validation checks
          * 3. Word is not valid
          */
-        if (lastEntry.length !== state.currentWord.length) {
-          return { ...state, message: "Word is not valid" };
+        if (state.currentWord.length !== state.count) {
+          return { ...state, message: "Word is not complete" };
         }
 
         /**
@@ -125,12 +123,11 @@ export function gameReducer(state: GameState, action: GameActions) {
           !hasOnlyOneLetterChanged(
             lastEntry.join(""),
             state.currentWord.join("")
-          )
+          ) &&
+          lastEntry.join("") !== state.currentWord.join("")
         ) {
           return { ...state, message: "Can only swap one letter at a time" };
         }
-
-        // TODO: Check if words match target word
 
         const board = new Map(state.board);
         board.set(state.currentWord.join(""), state.currentWord);
@@ -141,6 +138,10 @@ export function gameReducer(state: GameState, action: GameActions) {
           cursor: 0,
           board,
         } satisfies GameState;
+      }
+
+      if (state.board.size === 0) {
+        return state;
       }
 
       if (action.payload === "ArrowLeft") {
