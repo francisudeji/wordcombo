@@ -35,10 +35,10 @@ export default {
     keyframes: {
       punchy: {
         "0%": {
-          transform: "scale(0.8) translateY(-10px)",
+          transform: "scale(0.8) translateY(0px)",
         },
         "50%": {
-          transform: "scale(1.2) translateY(5px)",
+          transform: "scale(1.1) translateY(-10px)",
         },
         "100%": {
           transform: "scale(1) translateY(0)",
