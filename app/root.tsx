@@ -29,7 +29,7 @@ export function Layout({ children }: { children: React.ReactNode }) {
         <Links />
       </head>
       <body>
-        <React.StrictMode>{children}</React.StrictMode>
+        {children}
         <ScrollRestoration />
         <Scripts />
       </body>
