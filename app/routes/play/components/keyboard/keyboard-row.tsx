@@ -13,7 +13,7 @@ export function KeyboardRow({
   onClick,
 }: KeyboardRowProps) {
   const isSecondRow = row[0] === "A";
-  const isLastRow = row[0] === "ENTER";
+  const isLastRow = row[0] === "Enter";
 
   return (
     <div
@@ -46,7 +46,7 @@ export function KeyboardRow({
 }
 
 function getKey(keyboardKey: string) {
-  if (keyboardKey === "BACK") {
+  if (keyboardKey === "Backspace") {
     return (
       <svg
         xmlns="http://www.w3.org/2000/svg"
@@ -64,7 +64,7 @@ function getKey(keyboardKey: string) {
       </svg>
     );
   }
-  if (keyboardKey === "ENTER") {
+  if (keyboardKey === "Enter") {
     return (
       <svg
         xmlns="http://www.w3.org/2000/svg"

@@ -1,16 +1,23 @@
 import { useGameDispatch } from "../../hooks/use-game";
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import { keyboardRows, validKeys } from "./utils";
 import { KeyboardRow } from "./keyboard-row";
 
 type AlphabeticalKey = Exclude<
   (typeof keyboardRows)[number][number],
-  "BACK" | "ENTER"
+  "Backspace" | "Enter"
 >;
 
 export function Keyboard() {
   const [highlightedKey, setHighlightedKey] = useState("");
   const dispatch = useGameDispatch();
+
+  const handleKeyClick = useCallback(
+    (key: string) => {
+      dispatch({ type: "keyClicked", payload: key });
+    },
+    [dispatch]
+  );
 
   useEffect(() => {
     function handleKeyDown(e: KeyboardEvent) {
@@ -42,19 +49,19 @@ export function Keyboard() {
           return;
         }
 
-        return dispatch({ type: "keyClicked", payload: e.key });
+        // return dispatch({ type: "keyClicked", payload: e.key });
+        return handleKeyClick(e.key);
       }
 
       // For A-Z
       const key = e.key.toUpperCase() as AlphabeticalKey;
 
       if (validKeys.has(key)) {
-        dispatch({ type: "keyClicked", payload: e.key.toUpperCase() });
+        // dispatch({ type: "keyClicked", payload: e.key.toUpperCase() });
+        handleKeyClick(key.toUpperCase());
       }
 
-      const hKey =
-        e.key === "Backspace" ? "BACK" : e.key === "Enter" ? "ENTER" : e.key;
-      setHighlightedKey(hKey);
+      setHighlightedKey(e.key);
 
       setTimeout(() => {
         setHighlightedKey("");
@@ -66,14 +73,14 @@ export function Keyboard() {
     return () => {
       document.removeEventListener("keydown", handleKeyDown);
     };
-  }, [dispatch]);
+  }, [handleKeyClick]);
 
   return (
     <div className="space-y-4">
       {keyboardRows.map((row, index) => {
         return (
           <KeyboardRow
-            onClick={(key) => dispatch({ type: "keyClicked", payload: key })}
+            onClick={(key) => handleKeyClick(key)}
             row={row}
             key={index}
             highlightedKey={highlightedKey}
