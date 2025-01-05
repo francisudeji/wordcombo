@@ -1,17 +1,12 @@
 import { cn } from "~/lib/utils";
-import { isActionKey, isKeyHighlighted, type keyboardRows } from "./utils";
+import { isActionKey, type keyboardRows } from "./utils";
 
 interface KeyboardRowProps {
   row: (typeof keyboardRows)[number];
-  highlightedKey: string;
   onClick: (key: string) => void;
 }
 
-export function KeyboardRow({
-  row,
-  highlightedKey,
-  onClick,
-}: KeyboardRowProps) {
+export function KeyboardRow({ row, onClick }: KeyboardRowProps) {
   const isSecondRow = row[0] === "A";
   const isLastRow = row[0] === "Enter";
 
@@ -26,17 +21,15 @@ export function KeyboardRow({
         return (
           <button
             key={index}
+            id={key}
             className={cn(
-              "w-full select-none font-medium rounded-md py-3 flex items-center justify-center text-center bg-white outline-none ring-1 ring-neutral-300 focus:ring-2 focus:bg-neutral-100 focus:ring-neutral-300 hover:bg-neutral-100 active:bg-neutral-200 hover:scale-105 focus:scale-105",
-              isKeyHighlighted(key, highlightedKey)
-                ? "bg-neutral-100"
-                : "bg-white",
+              "w-full select-none font-medium rounded-md py-3 flex items-center justify-center bg-white text-center outline-none ring-1 ring-neutral-300 focus:ring-2 focus:bg-neutral-100 focus:ring-neutral-300 hover:bg-neutral-100 active:bg-neutral-200 hover:scale-105 focus:scale-105",
               isActionKey(key) && isLastRow ? "flex-[1.5]" : "flex-1",
               isSecondRow && "second-row-margin flex-1"
             )}
             onClick={() => onClick(key)}
           >
-            {getKey(key)}
+            {getKeyLabel(key)}
           </button>
         );
       })}
@@ -45,7 +38,7 @@ export function KeyboardRow({
   );
 }
 
-function getKey(keyboardKey: string) {
+function getKeyLabel(keyboardKey: string) {
   if (keyboardKey === "Backspace") {
     return (
       <svg

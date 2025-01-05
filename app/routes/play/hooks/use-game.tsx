@@ -8,7 +8,7 @@ import type { GameState } from "../components/game-provider/types";
 export function useGameState<T>(selector: (state: GameState) => T): T {
   const state = useContext(GameStateContext);
 
-  if (state === undefined) {
+  if (state == undefined) {
     throw new Error("useGameState must be used within a GameProvider");
   }
 

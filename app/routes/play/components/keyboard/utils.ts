@@ -4,10 +4,6 @@ export const keyboardRows = [
   ["Enter", "Z", "X", "C", "V", "B", "N", "M", "Backspace"],
 ] as const;
 
-export function isKeyHighlighted(key: string, highlightedKey: string) {
-  return key.toLowerCase() === highlightedKey.toLowerCase();
-}
-
 export function isActionKey(
   keyboardKey: (typeof keyboardRows)[number][number]
 ) {
@@ -15,5 +11,5 @@ export function isActionKey(
 }
 
 export const validKeys = new Set(
-  keyboardRows.flat().filter((key) => key !== "Enter" && key !== "Backspace")
+  keyboardRows.flat().map((key) => key.toUpperCase())
 );
