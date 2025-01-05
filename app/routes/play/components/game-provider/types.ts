@@ -11,8 +11,8 @@ export interface GameState {
   cursor: number;
 }
 
-interface GameActionType {
-  message: string;
+export interface GameActionType {
+  messageUpdated: string;
   keyClicked: string;
   pauseToggled: boolean;
   cursorMoved: number;

@@ -60,7 +60,7 @@ export function GameProvider({
       });
 
       timer.current = setTimeout(() => {
-        dispatch({ type: "message", payload: "" });
+        dispatch({ type: "messageUpdated", payload: "" });
       }, 1500);
     }
 

@@ -9,7 +9,7 @@ function hasOnlyOneLetterChanged(from: string, to: string) {
 
 export function gameReducer(state: GameState, action: GameActions) {
   switch (action.type) {
-    case "message": {
+    case "messageUpdated": {
       return { ...state, message: action.payload };
     }
 
@@ -54,14 +54,14 @@ export function gameReducer(state: GameState, action: GameActions) {
           return state;
         }
 
-        if (state.currentWord.length === 0) {
-          return state;
-        }
+        // if (state.currentWord.filter((w) => Boolean(w)).length === 0) {
+        //   return state;
+        // }
 
         const newCurrentWord = [...state.currentWord];
 
         if (newCurrentWord[state.cursor]?.length > 0) {
-          newCurrentWord.splice(state.cursor, 1);
+          newCurrentWord.splice(state.cursor, 1, "");
           return {
             ...state,
             currentWord: newCurrentWord,
@@ -69,7 +69,7 @@ export function gameReducer(state: GameState, action: GameActions) {
         }
 
         const newCursor = state.cursor <= 0 ? state.cursor : state.cursor - 1;
-        newCurrentWord.splice(newCursor, 1);
+        newCurrentWord.splice(newCursor, 1, "");
 
         return {
           ...state,
@@ -111,7 +111,10 @@ export function gameReducer(state: GameState, action: GameActions) {
          * Validation checks
          * 3. Word is not valid
          */
-        if (state.currentWord.length !== state.count) {
+
+        if (
+          state.currentWord.filter((w) => Boolean(w)).length !== state.count
+        ) {
           return { ...state, message: "Word is not complete" };
         }
 
