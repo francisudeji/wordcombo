@@ -5,21 +5,14 @@ import { GameProvider } from "./components/game-provider/game-provider";
 import { Toaster } from "sonner";
 import type { Route } from "./+types/play";
 import { CurrentWord } from "./components/current-word/current-word";
-import list from "../../list.txt?raw";
 
 export function meta(): Route.MetaDescriptors {
   return [{ title: "Play | WordCombo" }];
 }
 
 export function loader() {
-  const dictionary = list.split("\n").reduce((acc, word) => {
-    const uppercaseWord = word.toUpperCase();
-    acc[uppercaseWord] = uppercaseWord;
-    return acc;
-  }, {} as Record<string, string>);
-
   const wordsOfTheDay = { start: "HELLO", target: "WORLD" };
-  return { wordsOfTheDay, dictionary };
+  return { wordsOfTheDay };
 }
 
 export default function Play({ loaderData }: Route.ComponentProps) {
