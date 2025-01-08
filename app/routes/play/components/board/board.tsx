@@ -4,10 +4,11 @@ import { getHighlightedColour, mapStatusToColour } from "./utils";
 import { Paused } from "./paused";
 
 export function Board() {
-  const { board, wordsOfTheDay, paused } = useGameState((state) => ({
+  const { board, wordsOfTheDay, paused, count } = useGameState((state) => ({
     board: state.board,
     wordsOfTheDay: state.wordsOfTheDay,
     paused: state.paused,
+    count: state.count,
   }));
 
   if (paused) return <Paused />;
@@ -18,25 +19,27 @@ export function Board() {
         <p className="text-sm text-neutral-500 flex items-center">
           Press{" "}
           <kbd className="font-mono border bg-neutral-50 rounded-md py-0.5 px-1 mx-1">
-            Enter
+            <samp>Enter</samp>
           </kbd>{" "}
           or
           <kbd className="font-mono border bg-neutral-50 rounded-md py-0.5 px-1 mx-1">
             {" "}
-            <svg
-              xmlns="http://www.w3.org/2000/svg"
-              fill="none"
-              viewBox="0 0 24 24"
-              strokeWidth="1.5"
-              stroke="currentColor"
-              className="size-5"
-            >
-              <path
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                d="M4.5 12.75l6 6 9-13.5"
-              />
-            </svg>
+            <samp className="text-green-600">
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                fill="none"
+                viewBox="0 0 24 24"
+                strokeWidth="1.5"
+                stroke="currentColor"
+                className="size-5"
+              >
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  d="M4.5 12.75l6 6 9-13.5"
+                />
+              </svg>
+            </samp>
           </kbd>{" "}
           to start
         </p>
@@ -45,7 +48,7 @@ export function Board() {
   }
 
   return (
-    <div className="flex flex-col xs:w-3/4 sm:px-4 w-full sm:w-3/4 mx-auto rounded-md min-h-full justify-end gap-4">
+    <div className="flex flex-col xs:w-3/4 sm:px-5 w-full sm:w-3/4 mx-auto rounded-md min-h-full justify-end gap-4">
       {Array.from({ length: board.size })
         .map((_, index) => {
           const word = Array.from(board.entries());
@@ -56,7 +59,7 @@ export function Board() {
           return (
             <Word
               key={index}
-              letters={Array.from<string>({ length: 5 })
+              letters={Array.from<string>({ length: count })
                 .fill("")
                 .map((_, idx) => word[index]?.[1][idx])}
               colours={colours}
@@ -87,7 +90,7 @@ function Word({
           <span
             key={index}
             className={cn(
-              "py-4 ring-1 ring-white/10 rounded-lg text-xl font-medium max-w-[60px] max-h-[60px] flex items-center justify-center",
+              "py-4 ring-1 ring-white/10 rounded-lg text-xl font-medium flex items-center justify-center",
               letterColour,
               {
                 "animate-punchy1": index === 0,
