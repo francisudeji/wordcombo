@@ -1,10 +1,13 @@
 import { getStatus } from "../board/utils";
 import type { GameActions, GameState } from "./types";
 
-function hasOnlyOneLetterChanged(from: string, to: string) {
+function isOneEditOrSwap(from: string, to: string): boolean {
   const status = getStatus(from, to);
 
-  return status.filter((s) => s === "-1").length === 1;
+  const isOneChange = status.filter((s) => s === "-1").length === 1;
+  const isSwap = status.every((s) => s !== "-1");
+
+  return isOneChange || isSwap;
 }
 
 export function gameReducer(state: GameState, action: GameActions) {
@@ -48,15 +51,37 @@ export function gameReducer(state: GameState, action: GameActions) {
       return { ...state, paused: !state.paused };
     }
 
+    case "undoTriggered": {
+      const newCursor = action.payload;
+      const newCurrentWord = [...state.currentWord];
+      newCurrentWord[newCursor] = "";
+      return {
+        ...state,
+        currentWord: newCurrentWord,
+        cursor: newCursor,
+      };
+    }
+
+    case "redoTriggered": {
+      const newCursor = action.payload.index;
+      const newCurrentWord = [...state.currentWord];
+      newCurrentWord[newCursor] = action.payload.letter;
+      return {
+        ...state,
+        currentWord: newCurrentWord,
+        cursor: newCursor,
+      };
+    }
+
     case "keyClicked": {
+      if (state.paused) {
+        return { ...state, message: "Game is paused. Press play to continue." };
+      }
+
       if (action.payload === "Backspace") {
         if (state.board.size === 0) {
           return state;
         }
-
-        // if (state.currentWord.filter((w) => Boolean(w)).length === 0) {
-        //   return state;
-        // }
 
         const newCurrentWord = [...state.currentWord];
 
@@ -123,10 +148,7 @@ export function gameReducer(state: GameState, action: GameActions) {
          * 4. Changed more than one letter
          */
         if (
-          !hasOnlyOneLetterChanged(
-            lastEntry.join(""),
-            state.currentWord.join("")
-          ) &&
+          !isOneEditOrSwap(lastEntry.join(""), state.currentWord.join("")) &&
           lastEntry.join("") !== state.currentWord.join("")
         ) {
           return { ...state, message: "Can only swap one letter at a time" };
@@ -160,10 +182,6 @@ export function gameReducer(state: GameState, action: GameActions) {
           cursor:
             state.cursor >= state.count - 1 ? state.cursor : state.cursor + 1,
         };
-      }
-
-      if (state.paused) {
-        return { ...state, message: "Game is paused. Press play to continue." };
       }
 
       const newCurrentWord = [...state.currentWord];

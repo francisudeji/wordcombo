@@ -8,7 +8,7 @@ interface KeyboardRowProps {
 
 export function KeyboardRow({ row, onClick }: KeyboardRowProps) {
   const isSecondRow = row[0] === "A";
-  const isLastRow = row[0] === "Enter";
+  const isSecondToLastRow = row[0] === "Enter";
 
   return (
     <div
@@ -23,8 +23,8 @@ export function KeyboardRow({ row, onClick }: KeyboardRowProps) {
             key={index}
             id={key}
             className={cn(
-              "w-full select-none font-medium rounded-md py-3 flex items-center justify-center bg-white text-center outline-none ring-1 ring-neutral-300 focus:ring-2 focus:bg-neutral-100 focus:ring-neutral-300 hover:bg-neutral-100 active:bg-neutral-200 hover:scale-105 focus:scale-105",
-              isActionKey(key) && isLastRow ? "flex-[1.5]" : "flex-1",
+              "w-full select-none font-medium rounded-md py-3 flex text-lg items-center justify-center bg-white text-center outline-none ring-1 ring-neutral-300 transform transition-transform focus:ring-2 focus:bg-neutral-100 focus:ring-neutral-300 hover:bg-neutral-100 active:bg-neutral-200 active:scale-95 focus:scale-100",
+              isActionKey(key) && isSecondToLastRow ? "flex-[1.5]" : "flex-1",
               isSecondRow && "second-row-margin flex-1"
             )}
             onClick={() => onClick(key)}
@@ -47,7 +47,7 @@ function getKeyLabel(keyboardKey: string) {
         viewBox="0 0 24 24"
         strokeWidth="1.5"
         stroke="currentColor"
-        className="w-6 h-6"
+        className="size-6"
       >
         <path
           strokeLinecap="round"
@@ -65,7 +65,7 @@ function getKeyLabel(keyboardKey: string) {
         viewBox="0 0 24 24"
         strokeWidth="1.5"
         stroke="currentColor"
-        className="w-6 h-6"
+        className="size-6"
       >
         <path
           strokeLinecap="round"

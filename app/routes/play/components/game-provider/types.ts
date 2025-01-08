@@ -19,6 +19,8 @@ export interface GameActionType {
   dragStarted: number;
   dragHovered: number;
   dragDropped: { index: number; letter: string };
+  undoTriggered: number;
+  redoTriggered: { index: number; letter: string };
 }
 
 export type GameActions = {

@@ -1,5 +1,5 @@
 import { useGameDispatch, useGameState } from "../../hooks/use-game";
-import { useCallback, useEffect } from "react";
+import { useCallback, useEffect, useRef } from "react";
 import { keyboardRows, validKeys } from "./utils";
 import { KeyboardRow } from "./keyboard-row";
 import list from "../../../../list.txt?raw";
@@ -16,42 +16,83 @@ const dictionary = list.split("\n").reduce((acc, word) => {
 }, {} as Record<string, string>);
 
 export function Keyboard() {
-  const { currentWord, count } = useGameState((state) => {
+  const { currentWord, count, cursor } = useGameState((state) => {
     return {
       currentWord: state.currentWord,
       count: state.count,
+      cursor: state.cursor,
     };
   });
   const dispatch = useGameDispatch();
+  const history = useRef<Array<{ index: number; letter: string }>>([]);
+  const pointer = useRef<number>(0);
 
   const handleKeyClick = useCallback(
     (key: string) => {
-      if (key !== "Enter") {
+      // Handle A-Z
+      if (!["Backspace", "Enter", "ArrowLeft", "ArrowRight"].includes(key)) {
+        history.current.push({ index: cursor, letter: key });
+        pointer.current = history.current.length - 1;
         return dispatch({ type: "keyClicked", payload: key });
       }
 
-      const word = currentWord.join("");
+      // Handle enter key to check dictionary and then continue with the rest of the program
+      if (key === "Enter") {
+        const word = currentWord.join("");
+        if (word.length === count && !dictionary[word]) {
+          return dispatch({ type: "messageUpdated", payload: "Invalid word" });
+        }
 
-      if (word.length === count && !dictionary[word]) {
-        return dispatch({ type: "messageUpdated", payload: "Invalid word" });
+        history.current = [];
+        pointer.current = 0;
       }
 
       dispatch({ type: "keyClicked", payload: key });
     },
-    [dispatch, currentWord, count]
+    [dispatch, currentWord, count, cursor]
   );
 
   useEffect(() => {
     function handleKeyDown(e: KeyboardEvent) {
-      if (
-        e.ctrlKey ||
-        e.metaKey ||
-        e.altKey ||
-        e.shiftKey ||
-        e.key === " " ||
-        e.key === "Tab"
-      ) {
+      if (e.altKey || e.key === " " || e.key === "Tab") {
         return;
+      }
+
+      // UNDO
+      if (
+        (!e.shiftKey && e.ctrlKey && e.key.toUpperCase() === "Z") ||
+        (!e.shiftKey && e.metaKey && e.key.toUpperCase() === "Z")
+      ) {
+        const entry = history.current[pointer.current];
+
+        if (!entry) return;
+
+        dispatch({
+          type: "undoTriggered",
+          payload: entry.index,
+        });
+        pointer.current -= 1;
+      }
+
+      // REDO
+      if (
+        (e.shiftKey && e.metaKey && e.key.toUpperCase() === "Z") ||
+        (e.shiftKey && e.ctrlKey && e.key.toUpperCase() === "Z")
+      ) {
+        pointer.current += 1;
+        let entry = history.current[pointer.current];
+        if (!entry) {
+          pointer.current -= 1;
+          entry = history.current[pointer.current];
+        }
+
+        dispatch({
+          type: "redoTriggered",
+          payload: {
+            index: entry.index,
+            letter: entry.letter,
+          },
+        });
       }
 
       if (
@@ -66,6 +107,10 @@ export function Keyboard() {
         e.key === "Enter" &&
         (document.activeElement as HTMLElement).tagName === "BUTTON"
       ) {
+        return;
+      }
+
+      if (e.shiftKey || e.metaKey) {
         return;
       }
 
@@ -95,7 +140,7 @@ export function Keyboard() {
     return () => {
       document.removeEventListener("keydown", handleKeyDown);
     };
-  }, [handleKeyClick]);
+  }, [handleKeyClick, dispatch]);
 
   return (
     <div className="space-y-4">
