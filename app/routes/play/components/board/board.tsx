@@ -79,11 +79,7 @@ function Word({
   colours?: ReturnType<typeof getHighlightedColour>;
 }) {
   return (
-    <div
-      className={cn(
-        "grid grid-cols-5 text-center font-semibold gap-2 sm:gap-4"
-      )}
-    >
+    <div className={cn("grid grid-cols-5 text-center font-semibold gap-4")}>
       {letters.map((letter, index) => {
         const letterColour = colours?.[index] ?? mapStatusToColour("-1");
         return (
