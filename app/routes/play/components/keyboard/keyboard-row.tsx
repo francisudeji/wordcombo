@@ -49,8 +49,11 @@ export function KeyboardRow({
               if (
                 (isUndoKey && isUndoKeyDisabled) ||
                 (isShuffleKey && isShuffleKeyDisabled)
-              )
-                onClick(key);
+              ) {
+                return;
+              }
+
+              onClick(key);
             }}
           >
             {getKeyLabel(key)}
