@@ -4,9 +4,16 @@ import { isActionKey, type keyboardRows } from "./utils";
 interface KeyboardRowProps {
   row: (typeof keyboardRows)[number];
   onClick: (key: string) => void;
+  boardSize: number;
+  currentWordLength: number;
 }
 
-export function KeyboardRow({ row, onClick }: KeyboardRowProps) {
+export function KeyboardRow({
+  row,
+  onClick,
+  boardSize,
+  currentWordLength,
+}: KeyboardRowProps) {
   const isSecondRow = row[0] === "A";
   const isSecondToLastRow = row[0] === "Enter";
 
@@ -18,16 +25,27 @@ export function KeyboardRow({ row, onClick }: KeyboardRowProps) {
     >
       {isSecondRow && <div className="flex-[0.5]"></div>}
       {row.map((key, index) => {
+        const isUndoKey = key === "Undo";
+        const isUndoKeyDisabled = isUndoKey && boardSize < 2;
+
+        const isShuffleKey = key === "Shuffle";
+        const isShuffleKeyDisabled =
+          (isShuffleKey && currentWordLength < 5) || boardSize === 0;
+
         return (
           <button
             key={index}
             id={key}
             className={cn(
-              "w-full select-none font-medium rounded-md py-3 flex text-lg items-center justify-center bg-white text-center outline-none ring-1 ring-neutral-300 transform transition-transform focus:ring-2 focus:bg-neutral-100 focus:ring-neutral-300 hover:bg-neutral-100 active:bg-neutral-200 active:scale-95 focus:scale-100",
+              "w-full select-none font-medium rounded-md py-3 flex text-lg items-center justify-center bg-white text-center outline-none ring-1 ring-neutral-300 transform transition-transform focus:ring-2 focus:bg-neutral-100 focus:ring-neutral-300 hover:bg-neutral-100 active:bg-neutral-200 active:scale-95 focus:scale-100 aria-disabled:ring-neutral-300/50 aria-disabled:text-neutral-400 aria-disabled:cursor-not-allowed",
               isActionKey(key) && isSecondToLastRow ? "flex-[1.5]" : "flex-1",
               isSecondRow && "second-row-margin flex-1"
             )}
-            onClick={() => onClick(key)}
+            aria-disabled={isUndoKeyDisabled || isShuffleKeyDisabled}
+            onClick={() => {
+              if (isUndoKeyDisabled || isShuffleKeyDisabled) return;
+              onClick(key);
+            }}
           >
             {getKeyLabel(key)}
           </button>
@@ -75,6 +93,8 @@ function getKeyLabel(keyboardKey: string) {
       </svg>
     );
   }
+
+  if (keyboardKey === "Undo") return "Undo last move";
 
   return keyboardKey;
 }

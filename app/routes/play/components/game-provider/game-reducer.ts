@@ -10,6 +10,15 @@ function isOneEditOrSwap(from: string, to: string): boolean {
   return isOneChange || isSwap;
 }
 
+function shuffleCurrentWord(word: string[]): string[] {
+  const shuffled = [...word];
+  for (let i = shuffled.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [shuffled[i], shuffled[j]] = [shuffled[j], shuffled[i]];
+  }
+  return shuffled;
+}
+
 export function gameReducer(state: GameState, action: GameActions) {
   switch (action.type) {
     case "messageUpdated": {
@@ -76,6 +85,24 @@ export function gameReducer(state: GameState, action: GameActions) {
     case "keyClicked": {
       if (state.paused) {
         return { ...state, message: "Game is paused. Press play to continue." };
+      }
+
+      if (action.payload === "Undo") {
+        const lastEntryKey = Array.from(state.board.keys()).at(-1);
+        const board = new Map(state.board);
+
+        if (lastEntryKey) {
+          board.delete(lastEntryKey);
+          return { ...state, board };
+        }
+
+        return state;
+      }
+
+      if (action.payload === "Shuffle") {
+        const shuffled = shuffleCurrentWord(state.currentWord);
+
+        return { ...state, currentWord: shuffled };
       }
 
       if (action.payload === "Backspace") {

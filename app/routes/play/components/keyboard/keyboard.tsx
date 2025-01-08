@@ -16,11 +16,12 @@ const dictionary = list.split("\n").reduce((acc, word) => {
 }, {} as Record<string, string>);
 
 export function Keyboard() {
-  const { currentWord, count, cursor } = useGameState((state) => {
+  const { currentWord, count, cursor, board } = useGameState((state) => {
     return {
       currentWord: state.currentWord,
       count: state.count,
       cursor: state.cursor,
+      board: state.board,
     };
   });
   const dispatch = useGameDispatch();
@@ -30,7 +31,16 @@ export function Keyboard() {
   const handleKeyClick = useCallback(
     (key: string) => {
       // Handle A-Z
-      if (!["Backspace", "Enter", "ArrowLeft", "ArrowRight"].includes(key)) {
+      if (
+        ![
+          "Backspace",
+          "Enter",
+          "ArrowLeft",
+          "ArrowRight",
+          "Undo", // Undo last move(on-screen keyboard), not to be confused the CMD + Z or Ctrl + Z shortcut
+          "Shuffle",
+        ].includes(key)
+      ) {
         history.current.push({ index: cursor, letter: key });
         pointer.current = history.current.length - 1;
         return dispatch({ type: "keyClicked", payload: key });
@@ -150,6 +160,8 @@ export function Keyboard() {
             onClick={(key) => handleKeyClick(key)}
             row={row}
             key={index}
+            boardSize={board.size}
+            currentWordLength={currentWord.length}
           />
         );
       })}
