@@ -41,10 +41,16 @@ export function KeyboardRow({
               isActionKey(key) && isSecondToLastRow ? "flex-[1.5]" : "flex-1",
               isSecondRow && "second-row-margin flex-1"
             )}
-            aria-disabled={isUndoKeyDisabled || isShuffleKeyDisabled}
+            aria-disabled={
+              (isUndoKey && isUndoKeyDisabled) ||
+              (isShuffleKey && isShuffleKeyDisabled)
+            }
             onClick={() => {
-              if (isUndoKeyDisabled || isShuffleKeyDisabled) return;
-              onClick(key);
+              if (
+                (isUndoKey && isUndoKeyDisabled) ||
+                (isShuffleKey && isShuffleKeyDisabled)
+              )
+                onClick(key);
             }}
           >
             {getKeyLabel(key)}
@@ -63,7 +69,7 @@ function getKeyLabel(keyboardKey: string) {
         xmlns="http://www.w3.org/2000/svg"
         fill="none"
         viewBox="0 0 24 24"
-        strokeWidth="1.5"
+        strokeWidth="2"
         stroke="currentColor"
         className="size-6"
       >
@@ -81,7 +87,7 @@ function getKeyLabel(keyboardKey: string) {
         xmlns="http://www.w3.org/2000/svg"
         fill="none"
         viewBox="0 0 24 24"
-        strokeWidth="1.5"
+        strokeWidth="2"
         stroke="currentColor"
         className="size-6"
       >
