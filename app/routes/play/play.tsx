@@ -11,7 +11,7 @@ export function meta(): Route.MetaDescriptors {
 }
 
 export function loader() {
-  const wordsOfTheDay = { start: "HELLO", target: "WORLD" };
+  const wordsOfTheDay = { start: "BLINK", target: "SPILL" };
   return { wordsOfTheDay };
 }
 
