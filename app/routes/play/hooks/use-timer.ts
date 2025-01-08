@@ -43,14 +43,19 @@ export function useTimer(defaultTime = 0, isPaused = false) {
       const elapsed = getTime() - startTime;
       const seconds = Math.floor(elapsed / 1000) + lastElapsed.current;
 
-      setTime((prevTime) => {
-        if (prevTime >= ONE_HOUR && rafId.current) {
-          cancelAnimationFrame(rafId.current);
-          return prevTime;
-        }
+      /**
+       * TODO:
+       * - Uncomment this block of code to stop the timer after one hour
+       */
+      // setTime((prevTime) => {
+      //   if (prevTime >= ONE_HOUR && rafId.current) {
+      //     cancelAnimationFrame(rafId.current);
+      //     return prevTime;
+      //   }
 
-        return seconds;
-      });
+      //   return seconds;
+      // });
+      setTime(() => seconds);
       rafId.current = requestAnimationFrame(update);
     }
 
