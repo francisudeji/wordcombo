@@ -86,7 +86,7 @@ function Word({
           <span
             key={index}
             className={cn(
-              "py-4 ring-1 ring-white/10 rounded-lg text-xl font-medium flex items-center justify-center",
+              "py-4 ring-1 ring-white/10 rounded-lg text-2xl font-medium flex items-center justify-center shadow-lg",
               letterColour,
               {
                 "animate-punchy1": index === 0,

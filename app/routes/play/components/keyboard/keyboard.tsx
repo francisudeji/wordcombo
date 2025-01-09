@@ -155,13 +155,17 @@ export function Keyboard() {
   return (
     <div className="space-y-4">
       {keyboardRows.map((row, index) => {
+        const currentWordTrueLength = currentWord.filter((l) =>
+          Boolean(l)
+        ).length;
+
         return (
           <KeyboardRow
             onClick={(key) => handleKeyClick(key)}
             row={row}
             key={index}
             boardSize={board.size}
-            currentWordLength={currentWord.length}
+            currentWordLength={currentWordTrueLength}
           />
         );
       })}

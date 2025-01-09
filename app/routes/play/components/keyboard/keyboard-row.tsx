@@ -30,7 +30,8 @@ export function KeyboardRow({
 
         const isShuffleKey = key === "Shuffle";
         const isShuffleKeyDisabled =
-          (isShuffleKey && currentWordLength < 5) || boardSize === 0;
+          (isShuffleKey && currentWordLength < 5) ||
+          (isShuffleKey && boardSize === 0);
 
         return (
           <button
