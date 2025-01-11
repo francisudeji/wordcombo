@@ -3,6 +3,7 @@ import { useCallback, useEffect, useRef } from "react";
 import { keyboardRows, validKeys } from "./utils";
 import { KeyboardRow } from "./keyboard-row";
 import list from "../../../../list.txt?raw";
+import { useHistory } from "../../hooks/use-history";
 
 type AlphabeticalKey = Exclude<
   (typeof keyboardRows)[number][number],
@@ -25,8 +26,7 @@ export function Keyboard() {
     };
   });
   const dispatch = useGameDispatch();
-  const history = useRef<Array<{ index: number; letter: string }>>([]);
-  const pointer = useRef<number>(0);
+  const history = useHistory();
 
   const handleKeyClick = useCallback(
     (key: string) => {
@@ -41,8 +41,7 @@ export function Keyboard() {
           "Shuffle",
         ].includes(key)
       ) {
-        history.current.push({ index: cursor, letter: key });
-        pointer.current = history.current.length - 1;
+        history.push(cursor, key);
         return dispatch({ type: "keyClicked", payload: key });
       }
 
@@ -53,13 +52,12 @@ export function Keyboard() {
           return dispatch({ type: "messageUpdated", payload: "Invalid word" });
         }
 
-        history.current = [];
-        pointer.current = 0;
+        history.clear();
       }
 
       dispatch({ type: "keyClicked", payload: key });
     },
-    [dispatch, currentWord, count, cursor]
+    [dispatch, currentWord, count, cursor, history]
   );
 
   useEffect(() => {
@@ -68,40 +66,32 @@ export function Keyboard() {
         return;
       }
 
-      // UNDO
+      // Undo
       if (
         (!e.shiftKey && e.ctrlKey && e.key.toUpperCase() === "Z") ||
         (!e.shiftKey && e.metaKey && e.key.toUpperCase() === "Z")
       ) {
-        const entry = history.current[pointer.current];
-
-        if (!entry) return;
-
-        dispatch({
-          type: "undoTriggered",
-          payload: entry.index,
+        history.undo((entry) => {
+          dispatch({
+            type: "undoTriggered",
+            payload: entry.index,
+          });
         });
-        pointer.current -= 1;
       }
 
-      // REDO
+      // Redo
       if (
         (e.shiftKey && e.metaKey && e.key.toUpperCase() === "Z") ||
         (e.shiftKey && e.ctrlKey && e.key.toUpperCase() === "Z")
       ) {
-        pointer.current += 1;
-        let entry = history.current[pointer.current];
-        if (!entry) {
-          pointer.current -= 1;
-          entry = history.current[pointer.current];
-        }
-
-        dispatch({
-          type: "redoTriggered",
-          payload: {
-            index: entry.index,
-            letter: entry.letter,
-          },
+        history.redo((entry) => {
+          dispatch({
+            type: "redoTriggered",
+            payload: {
+              index: entry.index,
+              letter: entry.letter,
+            },
+          });
         });
       }
 
@@ -150,7 +140,7 @@ export function Keyboard() {
     return () => {
       document.removeEventListener("keydown", handleKeyDown);
     };
-  }, [handleKeyClick, dispatch]);
+  }, [handleKeyClick, dispatch, history]);
 
   return (
     <div className="space-y-4">
