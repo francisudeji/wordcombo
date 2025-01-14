@@ -13,12 +13,16 @@ export function meta(): Route.MetaDescriptors {
 
 export function loader({ context }: Route.LoaderArgs) {
   const wordsOfTheDay = getWordsOfTheDay();
-  return { wordsOfTheDay, context };
+  return {
+    wordsOfTheDay,
+    data1: context.VALUE_FROM_KV,
+    data2: context.VALUE_FROM_CLOUDFLARE,
+  };
 }
 
 export async function clientLoader({ serverLoader }: Route.ClientLoaderArgs) {
-  const { wordsOfTheDay, context } = await serverLoader();
-  console.log("Play route client loader", context);
+  const { wordsOfTheDay, data1, data2 } = await serverLoader();
+  console.log({ data1, data2 });
   const storedWordsOfTheDay = window.localStorage.getItem("wordsOfTheDay");
 
   if (!storedWordsOfTheDay) {

@@ -9,6 +9,7 @@ declare global {
 declare module "react-router" {
   export interface AppLoadContext {
     VALUE_FROM_CLOUDFLARE: string;
+    VALUE_FROM_KV: string | null;
   }
 }
 
