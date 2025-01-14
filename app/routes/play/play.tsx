@@ -5,24 +5,20 @@ import { GameProvider } from "./components/game-provider/game-provider";
 import { Toaster } from "sonner";
 import type { Route } from "./+types/play";
 import { CurrentWord } from "./components/current-word/current-word";
-import { getWordsOfTheDay } from "./utils";
 
 export function meta(): Route.MetaDescriptors {
   return [{ title: "Play | WordCombo" }];
 }
 
 export function loader({ context }: Route.LoaderArgs) {
-  const wordsOfTheDay = getWordsOfTheDay();
+  const wordsOfTheDay = context.WORDS_OF_THE_DAY;
   return {
     wordsOfTheDay,
-    data1: context.VALUE_FROM_KV,
-    data2: context.VALUE_FROM_CLOUDFLARE,
   };
 }
 
 export async function clientLoader({ serverLoader }: Route.ClientLoaderArgs) {
-  const { wordsOfTheDay, data1, data2 } = await serverLoader();
-  console.log({ data1, data2 });
+  const { wordsOfTheDay } = await serverLoader();
   const storedWordsOfTheDay = window.localStorage.getItem("wordsOfTheDay");
 
   if (!storedWordsOfTheDay) {

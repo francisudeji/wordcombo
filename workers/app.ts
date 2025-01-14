@@ -9,7 +9,7 @@ declare global {
 declare module "react-router" {
   export interface AppLoadContext {
     VALUE_FROM_CLOUDFLARE: string;
-    VALUE_FROM_KV: string | null;
+    WORDS_OF_THE_DAY: { start: string; target: string };
   }
 }
 
@@ -22,10 +22,11 @@ const requestHandler = createRequestHandler(
 export default {
   async fetch(request, env) {
     const todayUTC = new Date().toISOString().split("T")[0];
-    const wordsOfTheDay = await env.WORDS_OF_THE_DAY.get(todayUTC);
+    const data = (await env.WORDS_OF_THE_DAY.get(todayUTC)) || "HELLO, WORLD";
+    const [start, target] = data.trim().split(",");
     return requestHandler(request, {
       VALUE_FROM_CLOUDFLARE: "Hello from Cloudflare",
-      VALUE_FROM_KV: wordsOfTheDay,
+      WORDS_OF_THE_DAY: { start, target },
     });
   },
 } satisfies ExportedHandler<CloudflareEnvironment>;
