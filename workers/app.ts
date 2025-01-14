@@ -22,7 +22,9 @@ const requestHandler = createRequestHandler(
 export default {
   async fetch(request, env) {
     const todayUTC = new Date().toISOString().split("T")[0];
-    const data = (await env.WORDS_OF_THE_DAY.get(todayUTC)) || "HELLO, WORLD";
+    const data = import.meta.env.DEV
+      ? "PASTE,BOARD"
+      : (await env.WORDS_OF_THE_DAY.get(todayUTC)) || "HELLO, WORLD";
     const [start, target] = data.trim().split(",");
     return requestHandler(request, {
       VALUE_FROM_CLOUDFLARE: "Hello from Cloudflare",

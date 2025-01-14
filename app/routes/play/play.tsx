@@ -61,7 +61,7 @@ export default function Play({ loaderData }: Route.ComponentProps) {
             <Board />
           </div>
         </div>
-        <div className="sticky inset-0 bottom-0 bottom-half justify-end space-y-4 py-2 px-2 border-t sm:border sm:rounded-lg dark:border-white/15">
+        <div className="sticky inset-0 bottom-0 bottom-half justify-end space-y-4 py-2 px-2 border-t bg-white z-10 sm:border sm:rounded-lg dark:border-white/15 dark:bg-neutral-900">
           <CurrentWord />
           <Keyboard />
         </div>
