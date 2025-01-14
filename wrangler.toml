@@ -3,3 +3,7 @@ name = "word-combo"
 compatibility_date = "2024-11-18"
 main = "./build/server/assets/server-build2.js"
 assets = { directory = "./build/client/" }
+
+kv_namespaces = [
+  { binding = "WORDS_OF_THE_DAY", id="fde8774c-3c6f-48db-865d-e1f1addd471e", preview_id="b4bf50fe-bc36-4e93-85b0-7b84b43b60e2" }
+]

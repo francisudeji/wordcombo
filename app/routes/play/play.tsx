@@ -5,15 +5,46 @@ import { GameProvider } from "./components/game-provider/game-provider";
 import { Toaster } from "sonner";
 import type { Route } from "./+types/play";
 import { CurrentWord } from "./components/current-word/current-word";
+import { getWordsOfTheDay } from "./utils";
 
 export function meta(): Route.MetaDescriptors {
   return [{ title: "Play | WordCombo" }];
 }
 
 export function loader() {
-  const wordsOfTheDay = { start: "PASTE", target: "BOARD" };
+  const wordsOfTheDay = getWordsOfTheDay();
   return { wordsOfTheDay };
 }
+
+export async function clientLoader({ serverLoader }: Route.ClientLoaderArgs) {
+  const { wordsOfTheDay } = await serverLoader();
+  const storedWordsOfTheDay = window.localStorage.getItem("wordsOfTheDay");
+
+  if (!storedWordsOfTheDay) {
+    window.localStorage.setItem("wordsOfTheDay", JSON.stringify(wordsOfTheDay));
+    return { wordsOfTheDay };
+  }
+
+  try {
+    const parsedWordsOfTheDay = JSON.parse(storedWordsOfTheDay);
+    if (
+      parsedWordsOfTheDay &&
+      "start" in parsedWordsOfTheDay &&
+      "target" in parsedWordsOfTheDay &&
+      parsedWordsOfTheDay.start === wordsOfTheDay.start &&
+      parsedWordsOfTheDay.target === wordsOfTheDay.target
+    ) {
+      return { wordsOfTheDay: parsedWordsOfTheDay };
+    }
+    window.localStorage.setItem("wordsOfTheDay", JSON.stringify(wordsOfTheDay));
+  } catch (error) {
+    window.localStorage.setItem("wordsOfTheDay", JSON.stringify(wordsOfTheDay));
+  }
+
+  return { wordsOfTheDay };
+}
+
+clientLoader.hydrate = true;
 
 export default function Play({ loaderData }: Route.ComponentProps) {
   const { wordsOfTheDay } = loaderData;

@@ -1,7 +1,9 @@
 import { createRequestHandler } from "react-router";
 
 declare global {
-  interface CloudflareEnvironment {}
+  interface CloudflareEnvironment {
+    WORDS_OF_THE_DAY: { start: string; target: string };
+  }
 }
 
 declare module "react-router" {
@@ -17,7 +19,8 @@ const requestHandler = createRequestHandler(
 );
 
 export default {
-  fetch(request, env) {
+  fetch(request, env, ctx) {
+    console.log(env);
     return requestHandler(request, {
       VALUE_FROM_CLOUDFLARE: "Hello from Cloudflare",
     });
