@@ -4,25 +4,28 @@ import { getHighlightedColour, mapStatusToColour } from "./utils";
 import { Paused } from "./paused";
 
 export function Board() {
-  const { board, wordsOfTheDay, paused, count } = useGameState((state) => ({
+  const { board, wordsOfTheDay, count, status } = useGameState((state) => ({
     board: state.board,
     wordsOfTheDay: state.wordsOfTheDay,
-    paused: state.paused,
     count: state.count,
+    status: state.status,
   }));
 
-  if (paused) return <Paused />;
+  if (status === "paused") return <Paused />;
 
   if (board.size === 0) {
     return (
       <div className="flex flex-col flex-1 justify-center items-center text-center">
         <p className="text-sm text-neutral-500 flex items-center">
           Press{" "}
-          <kbd className="font-mono border bg-neutral-50 rounded-md py-0.5 px-1 mx-1">
+          <kbd className="font-mono border bg-neutral-50 rounded-md py-0.5 px-1 mx-1 dark:bg-[#2f2f2f] dark:text-[#ececec] dark:border-white/15">
             <samp>Enter</samp>
           </kbd>{" "}
           or
-          <kbd className="font-mono border bg-neutral-50 rounded-md py-0.5 px-1 mx-1">
+          <kbd
+            className="font-mono border bg-neutral-50 rounded-md py-0.5 px-1 mx-1 dark:bg-[#2f2f2f] dark:text-[#ececec] dark:border-white/15"
+            title="Colour by ha.te"
+          >
             {" "}
             <samp className="text-green-600">
               <svg

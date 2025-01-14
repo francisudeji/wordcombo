@@ -11,7 +11,7 @@ export function meta(): Route.MetaDescriptors {
 }
 
 export function loader() {
-  const wordsOfTheDay = { start: "BLINK", target: "SPILL" };
+  const wordsOfTheDay = { start: "PASTE", target: "BOARD" };
   return { wordsOfTheDay };
 }
 
@@ -22,14 +22,14 @@ export default function Play({ loaderData }: Route.ComponentProps) {
     <GameProvider wordsOfTheDay={wordsOfTheDay}>
       <Toaster />
       <div className="h-dvh py-1 flex-1 flex flex-col max-w-xl mx-auto">
-        <div className="top-half flex-1 flex flex-col overflow-y-auto scroll-smooth relative">
+        <div className="top-half flex-1 flex flex-col relative">
           <Header />
 
           <div className="board flex-1 flex flex-col justify-end p-4 my-10">
             <Board />
           </div>
         </div>
-        <div className="sticky inset-0 bottom-0 bottom-half justify-end space-y-4 py-2 px-2 border-t sm:border sm:rounded-lg">
+        <div className="sticky inset-0 bottom-0 bottom-half justify-end space-y-4 py-2 px-2 border-t sm:border sm:rounded-lg dark:border-white/15">
           <CurrentWord />
           <Keyboard />
         </div>

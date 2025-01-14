@@ -8,8 +8,12 @@ export function meta(): Route.MetaDescriptors {
 export default function Home() {
   return (
     <div className="h-screen flex flex-col items-center justify-center text-center">
-      <h1 className="font-semibold text-lg text-neutral-950">WordCombo</h1>
-      <p className="text-neutral-600">An online word game inspired by Wordle</p>
+      <h1 className="font-semibold text-lg text-neutral-950 dark:text-neutral-200">
+        WordCombo
+      </h1>
+      <p className="text-neutral-600 dark:text-neutral-400">
+        An online word game inspired by Wordle
+      </p>
 
       <div className="flex items-center space-x-2">
         <NavLink

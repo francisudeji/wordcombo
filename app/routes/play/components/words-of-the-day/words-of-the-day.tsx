@@ -2,20 +2,20 @@ import { useGameState } from "../../hooks/use-game";
 import { WordOfTheDay } from "./word-of-the-day";
 
 export function WordsOfTheDay() {
-  const { wordsOfTheDay, paused } = useGameState((state) => {
+  const { wordsOfTheDay, status } = useGameState((state) => {
     return {
       wordsOfTheDay: state.wordsOfTheDay,
-      paused: state.paused,
+      status: state.status,
     };
   });
 
   const { start, target } = wordsOfTheDay;
 
-  if (paused) return null;
+  if (status === "paused") return null;
 
   return (
     <div className="grid grid-cols-1 place-items-center absolute top-0 left-0 w-full pointer-events-none">
-      <div className="flex items-center justify-center bg-white border rounded-2xl p-2 space-x-2 sm:space-x-4 shadow mt-[50px]">
+      <div className="flex items-center justify-center bg-white border rounded-2xl p-2 space-x-2 sm:space-x-4 shadow mt-[50px] dark:bg-neutral-900 dark:border-white/15 dark:shadow-none">
         <WordOfTheDay word={start} />
         <span>
           <svg

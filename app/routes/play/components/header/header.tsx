@@ -5,9 +5,9 @@ import { ClientOnly } from "./client-only";
 import { Timer } from "./timer";
 
 export function Header() {
-  const paused = useGameState((state) => state.paused);
+  const status = useGameState((state) => state.status);
   return (
-    <header className="sticky inset-0 bg-white top-0 header py-1 border-b sm:border sm:rounded-md px-2">
+    <header className="sticky inset-0 bg-white top-0 header py-1 border-b sm:border sm:rounded-md px-2 dark:bg-neutral-900 dark:text-[#ececec] dark:border-white/15">
       <div className="flex items-center justify-between ">
         <IconButton title="Back">
           <svg
@@ -27,7 +27,7 @@ export function Header() {
         </IconButton>
         <ClientOnly>
           {() => {
-            return <Timer paused={paused} />;
+            return <Timer paused={status === "paused"} />;
           }}
         </ClientOnly>
         <IconButton title="Back">
