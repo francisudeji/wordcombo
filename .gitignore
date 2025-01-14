@@ -34,3 +34,4 @@ dist-ssr
 # Cloudflare
 .mf
 .wrangler
+test.txt
