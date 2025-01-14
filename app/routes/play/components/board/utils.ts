@@ -34,11 +34,11 @@ export function getStatus(guessWord: string, targetWord: string) {
 export function mapStatusToColour(status: Status) {
   switch (status) {
     case "1":
-      return "bg-green-500 border-green-600-TODO text-white";
+      return "bg-green-500 border-green-600-TODO text-white dark:bg-green-600";
     case "0":
-      return "bg-yellow-500 border-yellow-600-TODO text-white";
+      return "bg-yellow-500 border-yellow-600-TODO text-white dark:bg-yellow-600";
     case "-1":
-      return "bg-neutral-500 border-neutral-600-TODO text-white";
+      return "bg-neutral-500 border-neutral-600-TODO text-white dark:bg-[#2f2f2f]";
     default:
       throw new Error("Invalid status");
   }
