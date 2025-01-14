@@ -11,13 +11,14 @@ export function meta(): Route.MetaDescriptors {
   return [{ title: "Play | WordCombo" }];
 }
 
-export function loader() {
+export function loader({ context }: Route.LoaderArgs) {
   const wordsOfTheDay = getWordsOfTheDay();
-  return { wordsOfTheDay };
+  return { wordsOfTheDay, context };
 }
 
 export async function clientLoader({ serverLoader }: Route.ClientLoaderArgs) {
-  const { wordsOfTheDay } = await serverLoader();
+  const { wordsOfTheDay, context } = await serverLoader();
+  console.log("Play route client loader", context);
   const storedWordsOfTheDay = window.localStorage.getItem("wordsOfTheDay");
 
   if (!storedWordsOfTheDay) {

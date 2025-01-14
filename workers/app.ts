@@ -2,7 +2,7 @@ import { createRequestHandler } from "react-router";
 
 declare global {
   interface CloudflareEnvironment {
-    WORDS_OF_THE_DAY: { start: string; target: string };
+    WORDS_OF_THE_DAY: KVNamespace;
   }
 }
 
@@ -19,10 +19,12 @@ const requestHandler = createRequestHandler(
 );
 
 export default {
-  fetch(request, env, ctx) {
-    console.log(env);
+  async fetch(request, env) {
+    const todayUTC = new Date().toISOString().split("T")[0];
+    const wordsOfTheDay = await env.WORDS_OF_THE_DAY.get(todayUTC, "text");
     return requestHandler(request, {
       VALUE_FROM_CLOUDFLARE: "Hello from Cloudflare",
+      VALUE_FROM_KV: wordsOfTheDay,
     });
   },
 } satisfies ExportedHandler<CloudflareEnvironment>;
