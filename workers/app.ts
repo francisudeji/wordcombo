@@ -22,7 +22,7 @@ const requestHandler = createRequestHandler(
 export default {
   async fetch(request, env) {
     const todayUTC = new Date().toISOString().split("T")[0];
-    const wordsOfTheDay = await env.WORDS_OF_THE_DAY.get(todayUTC, "text");
+    const wordsOfTheDay = await env.WORDS_OF_THE_DAY.get(todayUTC);
     return requestHandler(request, {
       VALUE_FROM_CLOUDFLARE: "Hello from Cloudflare",
       VALUE_FROM_KV: wordsOfTheDay,
