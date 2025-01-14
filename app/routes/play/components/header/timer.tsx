@@ -2,14 +2,14 @@ import { IconButton } from "../../components/button/icon-button";
 import { useTimer } from "../../hooks/use-timer";
 
 export function Timer({ paused }: { paused: boolean }) {
-  const timer = useTimer(0, paused);
+  const { pauseTimer, time } = useTimer(0, paused);
   return (
     <div className="flex items-center space-x-2">
       {!paused && (
         <IconButton
           title="toggle timer"
           className="px-2"
-          onClick={() => timer.pauseTimer()}
+          onClick={() => pauseTimer()}
         >
           <svg
             xmlns="http://www.w3.org/2000/svg"
@@ -28,7 +28,7 @@ export function Timer({ paused }: { paused: boolean }) {
         </IconButton>
       )}
 
-      <p className="text-sm tabular-nums text-pretty">{timer.time}</p>
+      <p className="text-sm tabular-nums text-pretty">{time}</p>
     </div>
   );
 }

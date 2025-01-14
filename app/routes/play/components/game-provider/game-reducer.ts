@@ -37,53 +37,53 @@ export function gameReducer(state: GameState, action: GameActions) {
     }
 
     case "dragHovered": {
-      const newCurrentWord = [...state.currentWord];
-      newCurrentWord[action.payload] = state.currentWord[state.cursor];
-      newCurrentWord[state.cursor] = state.currentWord[action.payload];
+      const nextCurrentWord = [...state.currentWord];
+      nextCurrentWord[action.payload] = state.currentWord[state.cursor];
+      nextCurrentWord[state.cursor] = state.currentWord[action.payload];
       return {
         ...state,
-        currentWord: newCurrentWord,
+        currentWord: nextCurrentWord,
         cursor: action.payload,
       };
     }
 
     case "dragDropped": {
-      const newCurrentWord = [...state.currentWord];
-      newCurrentWord[action.payload.index] = action.payload.letter;
+      const nextCurrentWord = [...state.currentWord];
+      nextCurrentWord[action.payload.index] = action.payload.letter;
       return {
         ...state,
-        currentWord: newCurrentWord,
+        currentWord: nextCurrentWord,
       };
     }
 
-    case "pauseToggled": {
-      return { ...state, paused: !state.paused };
+    case "statusUpdated": {
+      return { ...state, status: action.payload };
     }
 
     case "undoTriggered": {
-      const newCursor = action.payload;
-      const newCurrentWord = [...state.currentWord];
-      newCurrentWord[newCursor] = "";
+      const nextCursor = action.payload;
+      const nextCurrentWord = [...state.currentWord];
+      nextCurrentWord[nextCursor] = "";
       return {
         ...state,
-        currentWord: newCurrentWord,
-        cursor: newCursor,
+        currentWord: nextCurrentWord,
+        cursor: nextCursor,
       };
     }
 
     case "redoTriggered": {
-      const newCursor = action.payload.index;
-      const newCurrentWord = [...state.currentWord];
-      newCurrentWord[newCursor] = action.payload.letter;
+      const nextCursor = action.payload.index;
+      const nextCurrentWord = [...state.currentWord];
+      nextCurrentWord[nextCursor] = action.payload.letter;
       return {
         ...state,
-        currentWord: newCurrentWord,
-        cursor: newCursor,
+        currentWord: nextCurrentWord,
+        cursor: nextCursor,
       };
     }
 
     case "keyClicked": {
-      if (state.paused) {
+      if (state.status === "paused") {
         return { ...state, message: "Game is paused. Press play to continue." };
       }
 
@@ -110,23 +110,23 @@ export function gameReducer(state: GameState, action: GameActions) {
           return state;
         }
 
-        const newCurrentWord = [...state.currentWord];
+        const nextCurrentWord = [...state.currentWord];
 
-        if (newCurrentWord[state.cursor]?.length > 0) {
-          newCurrentWord.splice(state.cursor, 1, "");
+        if (nextCurrentWord[state.cursor]?.length > 0) {
+          nextCurrentWord.splice(state.cursor, 1, "");
           return {
             ...state,
-            currentWord: newCurrentWord,
+            currentWord: nextCurrentWord,
           };
         }
 
-        const newCursor = state.cursor <= 0 ? state.cursor : state.cursor - 1;
-        newCurrentWord.splice(newCursor, 1, "");
+        const nextCursor = state.cursor <= 0 ? state.cursor : state.cursor - 1;
+        nextCurrentWord.splice(nextCursor, 1, "");
 
         return {
           ...state,
-          currentWord: newCurrentWord,
-          cursor: newCursor,
+          currentWord: nextCurrentWord,
+          cursor: nextCursor,
         } satisfies GameState;
       }
 
@@ -211,12 +211,12 @@ export function gameReducer(state: GameState, action: GameActions) {
         };
       }
 
-      const newCurrentWord = [...state.currentWord];
-      newCurrentWord[state.cursor] = action.payload;
+      const nextCurrentWord = [...state.currentWord];
+      nextCurrentWord[state.cursor] = action.payload;
 
       return {
         ...state,
-        currentWord: newCurrentWord,
+        currentWord: nextCurrentWord,
         cursor:
           state.cursor >= state.count - 1 ? state.cursor : state.cursor + 1,
       } satisfies GameState;

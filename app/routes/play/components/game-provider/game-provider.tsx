@@ -26,7 +26,7 @@ function createInitialState({
     currentWord: [...wordsOfTheDay.start],
     wordsOfTheDay,
     message: "",
-    paused: false,
+    status: "idle",
     cursor: board.size === 0 ? -1 : 0,
   } satisfies GameState;
 }

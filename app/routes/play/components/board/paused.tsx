@@ -12,7 +12,7 @@ export function Paused() {
 
       <button
         onClick={() => {
-          dispatch({ type: "pauseToggled", payload: false });
+          dispatch({ type: "statusUpdated", payload: "playing" });
         }}
         className="mt-4 bg-primary-500 text-white rounded-full px-6 py-2 bg-neutral-950"
       >

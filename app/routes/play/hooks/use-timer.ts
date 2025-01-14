@@ -22,7 +22,7 @@ export function useTimer(defaultTime = 0, isPaused = false) {
       rafId.current = null;
     }
     lastElapsed.current = time; // Save the current time so we can resume from it
-    dispatch({ type: "pauseToggled", payload: true });
+    dispatch({ type: "statusUpdated", payload: "paused" });
   }, [time, dispatch]);
 
   const resumeTimer = useCallback(() => {

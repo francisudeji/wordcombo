@@ -1,3 +1,4 @@
+type Status = "idle" | "paused" | "playing" | "won";
 export interface GameState {
   count: number;
   board: Map<string, string[]>;
@@ -7,20 +8,20 @@ export interface GameState {
     target: string;
   };
   message: string;
-  paused: boolean;
+  status: Status;
   cursor: number;
 }
 
 export interface GameActionType {
   messageUpdated: string;
   keyClicked: string;
-  pauseToggled: boolean;
   cursorMoved: number;
   dragStarted: number;
   dragHovered: number;
   dragDropped: { index: number; letter: string };
   undoTriggered: number;
   redoTriggered: { index: number; letter: string };
+  statusUpdated: Status;
 }
 
 export type GameActions = {
