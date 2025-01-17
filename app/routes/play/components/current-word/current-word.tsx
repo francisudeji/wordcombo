@@ -90,7 +90,7 @@ export function CurrentWord() {
               }}
               key={index}
               className={cn(
-                "text-xl py-2 px-4 rounded-lg border border-dashed border-neutral-300 font-medium h-[50px] w-[50px] flex items-center justify-center transform transition-transform duration-200 hover:scale-105 outline-none dark:bg-[#2f2f2f] dark:dark:text-[#ececec] dark:border-white/15",
+                "text-xl py-2 px-4 rounded-lg border border-dashed border-neutral-300 font-medium h-[50px] w-[50px] flex items-center justify-center transform transition-transform duration-200 hover:scale-105 outline-none dark:bg-[#2f2f2f] dark:text-[#ececec] dark:border-white/15",
                 {
                   "border-neutral-500 dark:border-white/50": index === cursor,
                   "text-transparent": draggedOverElIndex === index,

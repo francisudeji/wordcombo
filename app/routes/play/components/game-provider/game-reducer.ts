@@ -213,12 +213,18 @@ export function gameReducer(state: GameState, action: GameActions) {
 
       const nextCurrentWord = [...state.currentWord];
       nextCurrentWord[state.cursor] = action.payload;
+      const nextCursor =
+        state.cursor >= state.count - 1 ? state.cursor : state.cursor + 1;
+
+      // TODO: Allow this option in settings
+      // while (nextCursor < state.count && nextCurrentWord[nextCursor]) {
+      //   nextCursor++;
+      // }
 
       return {
         ...state,
         currentWord: nextCurrentWord,
-        cursor:
-          state.cursor >= state.count - 1 ? state.cursor : state.cursor + 1,
+        cursor: nextCursor,
       } satisfies GameState;
     }
     default: {

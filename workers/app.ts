@@ -21,11 +21,15 @@ const requestHandler = createRequestHandler(
 
 export default {
   async fetch(request, env) {
+    const DEFAULT_WORDS_OF_THE_DAY = "GREAT,GREET";
+    // "HELLO,WORLD";
     const todayUTC = new Date().toISOString().split("T")[0];
+
     const data = import.meta.env.DEV
-      ? "PASTE,BOARD"
-      : (await env.WORDS_OF_THE_DAY.get(todayUTC)) || "HELLO, WORLD";
+      ? DEFAULT_WORDS_OF_THE_DAY
+      : (await env.WORDS_OF_THE_DAY.get(todayUTC)) || DEFAULT_WORDS_OF_THE_DAY;
     const [start, target] = data.trim().split(",");
+
     return requestHandler(request, {
       VALUE_FROM_CLOUDFLARE: "Hello from Cloudflare",
       WORDS_OF_THE_DAY: { start, target },
