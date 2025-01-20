@@ -1,4 +1,4 @@
-type Status = "idle" | "paused" | "playing" | "won";
+export type Status = "idle" | "paused" | "playing" | "won";
 export interface GameState {
   count: number;
   board: Map<string, string[]>;

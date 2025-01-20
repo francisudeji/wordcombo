@@ -1,7 +1,8 @@
 import { useCallback, useEffect, useRef, useState } from "react";
 import { useGameDispatch } from "./use-game";
+import type { Status } from "../components/game-provider/types";
 
-const ONE_HOUR = 60 * 60;
+// const ONE_HOUR = 60 * 60;
 
 export function formatTime(time: number) {
   const minutes = String(Math.floor(time / 60)).padStart(2, "0");
@@ -10,7 +11,7 @@ export function formatTime(time: number) {
   return `${minutes}:${seconds}`;
 }
 
-export function useTimer(defaultTime = 0, isPaused = false) {
+export function useTimer(defaultTime = 0, status: Status) {
   const [time, setTime] = useState(defaultTime);
   const rafId = useRef<number | null>(null);
   const lastElapsed = useRef<number>(0);
@@ -62,12 +63,10 @@ export function useTimer(defaultTime = 0, isPaused = false) {
     rafId.current = requestAnimationFrame(update);
   }, []);
 
-  if (isPaused) {
-    resumeTimer();
-  }
-
   useEffect(() => {
-    resumeTimer();
+    if (status === "playing") {
+      resumeTimer();
+    }
 
     return () => {
       if (rafId.current) {
@@ -75,12 +74,11 @@ export function useTimer(defaultTime = 0, isPaused = false) {
         rafId.current = null;
       }
     };
-  }, [resumeTimer]);
+  }, [resumeTimer, status]);
 
   return {
     time: formatTime(time),
     pauseTimer,
     resumeTimer,
-    isPaused,
   };
 }

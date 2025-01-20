@@ -56,7 +56,6 @@ export default function Play({ loaderData }: Route.ComponentProps) {
       <div className="h-dvh py-1 flex-1 flex flex-col max-w-xl mx-auto">
         <div className="top-half flex-1 flex flex-col relative">
           <Header />
-
           <div className="board flex-1 flex flex-col justify-end p-4 my-10">
             <Board />
           </div>

@@ -7,7 +7,7 @@ import { useHistory } from "../../hooks/use-history";
 
 type AlphabeticalKey = Exclude<
   (typeof keyboardRows)[number][number],
-  "Backspace" | "Enter"
+  "Backspace" | "Enter" | "Undo" | "Shuffle"
 >;
 
 const dictionary = list.split("\n").reduce((acc, word) => {

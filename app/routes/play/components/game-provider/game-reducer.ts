@@ -19,7 +19,7 @@ function shuffleCurrentWord(word: string[]): string[] {
   return shuffled;
 }
 
-export function gameReducer(state: GameState, action: GameActions) {
+export function gameReducer(state: GameState, action: GameActions): GameState {
   switch (action.type) {
     case "messageUpdated": {
       return { ...state, message: action.payload };
@@ -127,7 +127,7 @@ export function gameReducer(state: GameState, action: GameActions) {
           ...state,
           currentWord: nextCurrentWord,
           cursor: nextCursor,
-        } satisfies GameState;
+        };
       }
 
       if (action.payload === "Enter") {
@@ -184,11 +184,15 @@ export function gameReducer(state: GameState, action: GameActions) {
         const board = new Map(state.board);
         board.set(state.currentWord.join(""), state.currentWord);
 
+        const hasStartWord =
+          board.has(state.wordsOfTheDay.start) && board.size === 1;
+
         return {
           ...state,
           currentWord: [],
           cursor: 0,
           board,
+          status: hasStartWord ? "playing" : state.status,
         } satisfies GameState;
       }
 
